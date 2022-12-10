@@ -1,0 +1,7 @@
+C:\Users\admin\source\repos\wefwef\wefwef\bin\Debug\wefwef.exe.config
+C:\Users\admin\source\repos\wefwef\wefwef\bin\Debug\wefwef.exe
+C:\Users\admin\source\repos\wefwef\wefwef\bin\Debug\wefwef.pdb
+C:\Users\admin\source\repos\wefwef\wefwef\obj\Debug\wefwef.csproj.AssemblyReference.cache
+C:\Users\admin\source\repos\wefwef\wefwef\obj\Debug\wefwef.csproj.CoreCompileInputs.cache
+C:\Users\admin\source\repos\wefwef\wefwef\obj\Debug\wefwef.exe
+C:\Users\admin\source\repos\wefwef\wefwef\obj\Debug\wefwef.pdb
