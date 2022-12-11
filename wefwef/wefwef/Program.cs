@@ -17,7 +17,8 @@ namespace wefwef
             //Advent.Day8();
             //Advent.Day9();
             //Advent.Day10();
-            Advent.Day11();
+            //Advent.Day11();
+            Advent.Day12();
 
             Console.ReadLine();
         }

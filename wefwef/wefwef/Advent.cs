@@ -4,6 +4,7 @@ using System.Linq;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using System.Numerics;
 
 namespace wefwef
 {
@@ -12,7 +13,7 @@ namespace wefwef
         public class Directory
         {
             public string Dir { get; set; }
-            public long Size { get; set; }
+            public int Size { get; set; }
 
             public Directory(string dir, int size)
             {
@@ -304,7 +305,136 @@ namespace wefwef
             //Console.WriteLine(ints.Sum());
         }
 
+
+        public class Monkey
+        {
+            public int MonkeyNumber { get; set; }
+            public List<long> MonkeyItems { get; set; }
+            public string Operation { get; set; }
+            public long Divisible { get; set; }
+            public int TrueThrowTo { get; set; }
+            public int FalseThrowTo { get; set; }
+            public long InspectedCount { get; set; }
+
+            public Monkey(int monkeyNumber, List<long> monkeyItems, string operation, long divisible, int trueThrowTo, int falseThrowTo, long inspectedCount)
+            {
+                MonkeyNumber = monkeyNumber;
+                MonkeyItems = monkeyItems;
+                Operation = operation;
+                Divisible = divisible;
+                TrueThrowTo = trueThrowTo;
+                FalseThrowTo = falseThrowTo;
+                InspectedCount = inspectedCount;
+            }
+
+            public void InspectItem()
+            {
+                InspectedCount++;
+            }
+
+            public long OperateItem(long item)
+            {
+                string[] parts = Operation.Split(' ');
+                if (parts[4] == "*")
+                {
+                    if (long.TryParse(parts[5], out long value))
+                    {
+                        long newItem = item * value;
+                        return newItem;
+                    }
+                    else
+                    {
+                        long newItem = item * item;
+                        return newItem;
+                    }
+                }
+                else
+                {
+                    if (long.TryParse(parts[5], out long value))
+                    {
+                        long newItem = item + value;
+                        return newItem;
+                    }
+                    else
+                    {
+                        long newItem = item + item;
+                        return newItem;
+                    }
+                }
+            }
+        }
         public static void Day11()
+        {
+            int totalMonkeys = 8;
+            var input = File.ReadAllLines("input11.txt");
+            List<Monkey> monkeys = new List<Monkey>();
+            int nextBach = 0;
+            
+            int modVal = 1;
+            
+
+            for(int i = 1; i <= totalMonkeys; i++)
+            {
+                int monkeyNumber = Convert.ToInt32(input[(1-1)+nextBach].Split(' ')[1].Remove(1));
+                string[] items = input[(2 - 1) + nextBach].Split(' ');
+                List<long> monkeyItems = new List<long>();
+                for(int j = 2; j < items.Length; j++)
+                {
+                    monkeyItems.Add(Convert.ToInt32(items[j].Remove(items[j].Length-1)));
+                }
+                string operation = input[(3 - 1) + nextBach];
+                int divisible = Convert.ToInt32(input[(4 - 1) + nextBach].Split(' ')[3]);
+                int trueThrow = Convert.ToInt32(input[(5 - 1) + nextBach].Split(' ')[5]);
+                int falseThrow = Convert.ToInt32(input[(6 - 1) + nextBach].Split(' ')[5]);
+
+                Monkey monkey = new Monkey(monkeyNumber, monkeyItems, operation, divisible, falseThrow, trueThrow, 0);
+                monkeys.Add(monkey);
+
+                nextBach += 7;
+            }
+            var m = monkeys.Select(f => f.Divisible).ToList();
+            foreach (var j in m)
+            {
+                modVal *= int.Parse(j.ToString());
+            }
+            Console.WriteLine("Done reading");
+
+            for(int i = 0; i < 10000; i++)
+            {
+                 Console.WriteLine("Current iteration: {0}", i);
+                foreach(var monkey in monkeys)
+                {
+                    List<long> itemsToRemove = new List<long>();
+
+                    foreach(var item in monkey.MonkeyItems)
+                    {
+                        monkey.InspectItem();
+
+                        long newItem = monkey.OperateItem(item);
+                        newItem = newItem % long.Parse(modVal.ToString());
+
+                        if(newItem % monkey.Divisible == 0)
+                        {
+                            itemsToRemove.Add(item);
+                            monkeys[monkey.FalseThrowTo].MonkeyItems.Add(newItem); 
+                        }
+                        else
+                        {
+                            itemsToRemove.Add(item);
+                            monkeys[monkey.TrueThrowTo].MonkeyItems.Add(newItem);
+                        }          
+                    }
+
+                    monkey.MonkeyItems = new List<long>();
+                }
+            }
+
+            var answer = monkeys.Select(f => f.InspectedCount).ToList();
+            answer.Sort();
+
+            Console.WriteLine(answer[7] * answer[6]);
+        }
+        public static void Day12()
         {
 
         }

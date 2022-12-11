@@ -12,3 +12,11 @@ C:\Users\admin\Documents\AdventOfCode2022\wefwef\wefwef\obj\Debug\wefwef.csproj.
 C:\Users\admin\Documents\AdventOfCode2022\wefwef\wefwef\obj\Debug\wefwef.csproj.CoreCompileInputs.cache
 C:\Users\admin\Documents\AdventOfCode2022\wefwef\wefwef\obj\Debug\wefwef.exe
 C:\Users\admin\Documents\AdventOfCode2022\wefwef\wefwef\obj\Debug\wefwef.pdb
+C:\Users\Devina\Documents\GitHub\AdventOfCode2022\wefwef\wefwef\bin\Debug\wefwef.exe.config
+C:\Users\Devina\Documents\GitHub\AdventOfCode2022\wefwef\wefwef\bin\Debug\wefwef.exe
+C:\Users\Devina\Documents\GitHub\AdventOfCode2022\wefwef\wefwef\bin\Debug\wefwef.pdb
+C:\Users\Devina\Documents\GitHub\AdventOfCode2022\wefwef\wefwef\obj\Debug\wefwef.csproj.AssemblyReference.cache
+C:\Users\Devina\Documents\GitHub\AdventOfCode2022\wefwef\wefwef\obj\Debug\wefwef.csproj.SuggestedBindingRedirects.cache
+C:\Users\Devina\Documents\GitHub\AdventOfCode2022\wefwef\wefwef\obj\Debug\wefwef.csproj.CoreCompileInputs.cache
+C:\Users\Devina\Documents\GitHub\AdventOfCode2022\wefwef\wefwef\obj\Debug\wefwef.exe
+C:\Users\Devina\Documents\GitHub\AdventOfCode2022\wefwef\wefwef\obj\Debug\wefwef.pdb
