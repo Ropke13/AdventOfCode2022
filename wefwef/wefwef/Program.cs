@@ -9,7 +9,10 @@ namespace wefwef
     {
         static void Main(string[] args)
         {
-            //oldadvent.RandomDay();
+            //oldadvent.A2015Day7();
+
+            //oldadvent.A2020Day3();
+
             //Advent.Day7();
             //Advent.Day8();
             //Advent.Day9();

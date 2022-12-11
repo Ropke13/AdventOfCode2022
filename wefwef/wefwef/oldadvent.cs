@@ -10,7 +10,8 @@ namespace wefwef
 {
     class oldadvent
     {
-        public static void RandomDay()
+        //check which day it was and rename!
+        public static void A2020Day3()
         {
             string[,] input = new string[323, 31];
             List<int> output = new List<int>();
@@ -102,6 +103,150 @@ namespace wefwef
             }
 
             return answer;
+        }
+
+
+        public class Node
+        {
+            public string NodeName { get; set; }
+            public int Value { get; set; }
+
+            public Node (string nodename, int value)
+            {
+                NodeName = nodename;
+                Value = value;
+            }
+        }
+        public static void A2015Day7()
+        {
+            var input = File.ReadAllLines("2015-07.txt");
+
+            List<string> instructions = new List<string>();
+            List<string> usedItems = new List<string>();
+            List<Node> nodes = new List<Node>();
+            int count = 0;
+
+            foreach(var item in input)
+            {
+                instructions.Add(item);
+            }
+
+            while(count != instructions.Count)
+            {
+                foreach (var item in instructions)
+                {
+                    if (usedItems.Contains(item))
+                    {
+                        continue;
+                    }
+                    string[] number = item.Split(' ');
+                    if (item.Contains("AND"))
+                    {
+                        if (int.TryParse(number[0], out int valu) && nodes.Exists(f => f.NodeName == number[2]))
+                        {
+                            int value1 = valu;
+                            int value2 = nodes.SingleOrDefault(f => f.NodeName == number[2]).Value;
+
+                            Node n = new Node(number[4], value1 & value2);
+                            nodes.Add(n);
+                            count++;
+                            usedItems.Add(item);
+                        }
+                        else if (nodes.Where(f => f.NodeName == number[0] || f.NodeName == number[2]).ToList().Count == 2)
+                        {
+                            int value1 = nodes.SingleOrDefault(f => f.NodeName == number[0]).Value;
+                            int value2 = nodes.SingleOrDefault(f => f.NodeName == number[2]).Value;
+
+                            Node n = new Node(number[4], value1 & value2);
+                            nodes.Add(n);
+                            count++;
+                            usedItems.Add(item);
+                        }
+                    }
+                    else if (item.Contains("OR"))
+                    {
+                        if (int.TryParse(number[0], out int valu) && nodes.Exists(f => f.NodeName == number[2]))
+                        {
+                            int value1 = valu;
+                            int value2 = nodes.SingleOrDefault(f => f.NodeName == number[2]).Value;
+
+                            Node n = new Node(number[4], value1 | value2);
+                            nodes.Add(n);
+                            count++;
+                            usedItems.Add(item);
+                        }
+                        else if (nodes.Where(f => f.NodeName == number[0] || f.NodeName == number[2]).ToList().Count == 2)
+                        {
+                            int value1 = nodes.SingleOrDefault(f => f.NodeName == number[0]).Value;
+                            int value2 = nodes.SingleOrDefault(f => f.NodeName == number[2]).Value;
+
+                            Node n = new Node(number[4], value1 | value2);
+                            nodes.Add(n);
+                            count++;
+                            usedItems.Add(item);
+                        }
+                    }
+                    else if (item.Contains("LSHIFT"))
+                    {
+                        if (nodes.Exists(f => f.NodeName == number[0]))
+                        {
+                            int value1 = nodes.SingleOrDefault(f => f.NodeName == number[0]).Value;
+                            int value2 = int.Parse(number[2]);
+
+                            Node n = new Node(number[4], value1 << value2);
+                            nodes.Add(n);
+                            count++;
+                            usedItems.Add(item);
+                        }
+                    }
+                    else if (item.Contains("RSHIFT"))
+                    {
+                        if (nodes.Exists(f => f.NodeName == number[0]))
+                        {
+                            int value1 = nodes.SingleOrDefault(f => f.NodeName == number[0]).Value;
+                            int value2 = int.Parse(number[2]);
+
+                            Node n = new Node(number[4], value1 >> value2);
+                            nodes.Add(n);
+                            count++;
+                            usedItems.Add(item);
+                        }
+                    }
+                    else if (item.Contains("NOT"))
+                    {
+                        if(nodes.Exists(f => f.NodeName == number[1]))
+                        {
+                            int value1 = nodes.SingleOrDefault(f => f.NodeName == number[1]).Value;
+
+                            Node n = new Node(number[3], ~value1);
+                            nodes.Add(n);
+                            count++;
+                            usedItems.Add(item);
+                        }
+                    }
+                    else if (number.Length == 3)
+                    {
+                        if (nodes.Exists(f => f.NodeName == number[0]))
+                        {
+                            Node n = new Node(number[2], nodes.SingleOrDefault(f => f.NodeName == number[0]).Value);
+                            nodes.Add(n);
+                            count++;
+                            usedItems.Add(item);
+                        }
+                        else if (int.TryParse(number[0], out int value))
+                        {
+                            Node n = new Node(number[2], value);
+                            nodes.Add(n);
+                            count++;
+                            usedItems.Add(item);
+                        }
+                    }
+                }
+            }
+
+            var answer = nodes.SingleOrDefault(f => f.NodeName == "a").Value;
+            Console.WriteLine(answer);
+
         }
     }
 }
