@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
@@ -530,7 +531,110 @@ namespace wefwef
             }
 
             //Part1();
-            //Part2();
+            Part2();
+        }
+
+        //nemoku day13 :(((
+        public static void Day13()
+        {
+            var input = File.ReadAllLines("input13.txt");
+
+            for(int i = 0; i < input.Length; i += 3)
+            {
+            }
+        }
+
+        public static void Day14()
+        {
+            var input = File.ReadAllLines("input14.txt");
+            int lowestY = 0;
+
+            string[,] map = new string[1000, 1000];
+
+            for (int i = 0; i < 1000; i++)
+            {
+                for (int j = 0; j < 1000; j++)
+                {
+                    map[i, j] = ".";
+                    if(i == 0 & j == 500)
+                    {
+                        map[i, j] = "+";
+                    }
+                }
+            }
+
+            foreach (var line in input)
+            {
+                string[] parts = Regex.Split(line, " -> ");
+
+                for(var i = 0; i < parts.Length-1; i++)
+                {
+                    string[] xyPair1 = parts[i].Split(',');
+                    string[] xyPair2 = parts[i + 1].Split(',');
+
+                    int x1 = int.Parse(xyPair1[0]);
+                    int y1 = int.Parse(xyPair1[1]);
+
+                    int x2 = int.Parse(xyPair2[0]);
+                    int y2 = int.Parse(xyPair2[1]);
+
+                    if (lowestY < y1) lowestY = y1;
+                    if (lowestY < y2) lowestY = y2;
+
+                    if (y1 == y2)
+                    {
+                        if(x1 > x2)
+                        {
+                            for(int j = x2; j <= x1; j++)
+                            {
+                                map[y1, j] = "#";
+                            }
+                        }
+                        else
+                        {
+                            for (int j = x2; j >= x1; j--)
+                            {
+                                map[y1, j] = "#";
+                            }
+                        }
+                    }
+
+                    if(x1 == x2)
+                    {
+                        if(y1 > y2)
+                        {
+                            for (int j = y2; j <= y1; j++)
+                            {
+                                map[j, x1] = "#";
+                            }
+                        }
+                        else
+                        {
+                            for (int j = y2; j >= y1; j--)
+                            {
+                                map[j, x1] = "#";
+                            }
+                        }
+                    }
+                }
+            }
+
+
+            using(StreamWriter w = new StreamWriter("tests.txt"))
+            {
+                for (int i = 0; i < 1000; i++)
+                {
+                    w.Write(i);
+                    for (int j = 0; j < 1000; j++)
+                    {
+                        w.Write(map[i, j]);
+                    }
+                    w.WriteLine();
+                }
+            }
+            Console.WriteLine("Done");
+            Console.WriteLine(lowestY);
+            
         }
         
 
