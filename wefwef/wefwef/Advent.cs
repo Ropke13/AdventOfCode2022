@@ -544,6 +544,8 @@ namespace wefwef
             }
         }
 
+        
+
         public static void Day14()
         {
             var input = File.ReadAllLines("input14.txt");

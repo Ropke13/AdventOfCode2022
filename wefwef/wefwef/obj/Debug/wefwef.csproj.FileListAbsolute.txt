@@ -20,3 +20,11 @@ C:\Users\Devina\Documents\GitHub\AdventOfCode2022\wefwef\wefwef\obj\Debug\wefwef
 C:\Users\Devina\Documents\GitHub\AdventOfCode2022\wefwef\wefwef\obj\Debug\wefwef.csproj.CoreCompileInputs.cache
 C:\Users\Devina\Documents\GitHub\AdventOfCode2022\wefwef\wefwef\obj\Debug\wefwef.exe
 C:\Users\Devina\Documents\GitHub\AdventOfCode2022\wefwef\wefwef\obj\Debug\wefwef.pdb
+C:\Users\Pikachu!\Documents\GitHub\AdventOfCode2022\wefwef\wefwef\bin\Debug\wefwef.exe.config
+C:\Users\Pikachu!\Documents\GitHub\AdventOfCode2022\wefwef\wefwef\bin\Debug\wefwef.exe
+C:\Users\Pikachu!\Documents\GitHub\AdventOfCode2022\wefwef\wefwef\bin\Debug\wefwef.pdb
+C:\Users\Pikachu!\Documents\GitHub\AdventOfCode2022\wefwef\wefwef\obj\Debug\wefwef.csproj.AssemblyReference.cache
+C:\Users\Pikachu!\Documents\GitHub\AdventOfCode2022\wefwef\wefwef\obj\Debug\wefwef.csproj.SuggestedBindingRedirects.cache
+C:\Users\Pikachu!\Documents\GitHub\AdventOfCode2022\wefwef\wefwef\obj\Debug\wefwef.csproj.CoreCompileInputs.cache
+C:\Users\Pikachu!\Documents\GitHub\AdventOfCode2022\wefwef\wefwef\obj\Debug\wefwef.exe
+C:\Users\Pikachu!\Documents\GitHub\AdventOfCode2022\wefwef\wefwef\obj\Debug\wefwef.pdb

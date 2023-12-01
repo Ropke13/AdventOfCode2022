@@ -20,7 +20,8 @@ namespace wefwef
             //Advent.Day11();
             //Advent.Day12();
             //Advent.Day13();
-            Advent.Day14();
+            //Advent.Day14();
+            Advent2023.Day1();
 
             Console.ReadLine();
         }
