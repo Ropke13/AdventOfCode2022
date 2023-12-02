@@ -11,7 +11,7 @@ namespace wefwef
     {
         public static void Day1()
         {
-            var input = File.ReadAllLines("input1.txt");
+            var input = File.ReadAllLines("input1-2023.txt");
             List<string> numberStrings = new List<string> { "one", "two", "three", "four", "five", "six", "seven", "eight", "nine" };
 
             int numberCount = 0;
@@ -77,6 +77,61 @@ namespace wefwef
             }
 
             Console.WriteLine(sum);
+        }
+
+        public static void Day2()
+        {
+            var input = File.ReadAllLines("input2-2023.txt");
+            int sum = 0;
+
+            int lowestBlue = int.MinValue;
+            int lowestRed = int.MinValue;
+            int lowestGreen = int.MinValue;
+
+            foreach (var line in input) 
+            {
+                string[] removeGame = line.Split(':');
+                string[] gameSets = removeGame[1].Split(';');
+
+                for(int i = 0; i < gameSets.Length; i++)
+                {
+                    string[] games = gameSets[i].Split(',');
+                    for(int j = 0; j < games.Length; j++) 
+                    {
+                        string[] numberColor = games[j].Split(' ');
+
+                        if (numberColor[2] == "blue")
+                        {
+                            if (int.Parse(numberColor[1]) > lowestBlue)
+                            {
+                                lowestBlue = int.Parse(numberColor[1]);
+                            } 
+                        }
+                        else if (numberColor[2] == "red")
+                        {
+                            if (int.Parse(numberColor[1]) > lowestRed)
+                            {
+                                lowestRed = int.Parse(numberColor[1]);
+                            }
+                        }
+                        else
+                        {
+                            if (int.Parse(numberColor[1]) > lowestGreen)
+                            {
+                                lowestGreen = int.Parse(numberColor[1]);
+                            }
+                        }
+                    }
+                }
+
+                sum += lowestBlue * lowestGreen * lowestRed;
+
+                lowestBlue = int.MinValue;
+                lowestRed = int.MinValue;
+                lowestGreen = int.MinValue;
+            }
+
+            Console.WriteLine(sum.ToString());
         }
     }
 }

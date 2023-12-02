@@ -10,7 +10,7 @@ using System.Numerics;
 
 namespace wefwef
 {
-    class Advent
+    class Advent2022
     {
         public class Directory
         {

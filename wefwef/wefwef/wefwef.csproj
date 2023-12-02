@@ -44,7 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Advent.cs" />
+    <Compile Include="Advent2022.cs" />
     <Compile Include="Advent2023.cs" />
     <Compile Include="oldadvent.cs" />
     <Compile Include="Program.cs" />
