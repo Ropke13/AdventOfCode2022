@@ -153,7 +153,6 @@ namespace wefwef
             bool addNumber = true;
             int sum = 0;
             List<NumberNode> numbers = new List<NumberNode>();
-            List<Tuple<int, int>> currentNumberCoords = new List<Tuple<int, int>>();
             Tuple<int, int> forGear = null;
 
             foreach (var line in input)
@@ -270,5 +269,58 @@ namespace wefwef
 
             Console.WriteLine(sum);
         }
+
+        public static void Day4()
+        {
+			var input = File.ReadAllLines("input4-2023.txt");
+
+            List<int> CardLine = new List<int>();
+
+            for(int i = 1; i <= input.Length; i++)
+            {
+                CardLine.Add(i);
+            }
+
+            int sum = 0;
+            int currentScore = 0;
+            int winCount = 0;
+            int totalGames = 0;
+
+
+            while (CardLine.Count > 0) 
+            {
+                int currentGame = CardLine[0];
+                CardLine.RemoveAt(0);
+                totalGames++;
+
+				string[] splitgame = input[currentGame-1].Split(new[] { ": " }, StringSplitOptions.None);
+				string[] splitWinAndCurrNumbers = splitgame[1].Split(new[] { " | " }, StringSplitOptions.None);
+				string[] winningNumbers = splitWinAndCurrNumbers[0].Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
+				string[] myNumbers = splitWinAndCurrNumbers[1].Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
+
+				for (int i = 0; i < winningNumbers.Length; i++)
+				{
+					for (int j = 0; j < myNumbers.Length; j++)
+					{
+						if (winningNumbers[i] == myNumbers[j])
+						{
+                            winCount++;
+						}
+					}
+				}
+
+                for(int j = winCount; j > 0; j--)
+                {
+                    if(j + currentGame <= input.Length)
+                    {
+						CardLine.Insert(0, j + currentGame);
+					}
+                }
+
+                winCount = 0;
+			}
+
+            Console.WriteLine(totalGames);
+		}
     }
 }
