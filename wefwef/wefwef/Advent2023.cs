@@ -281,11 +281,8 @@ namespace wefwef
                 CardLine.Add(i);
             }
 
-            int sum = 0;
-            int currentScore = 0;
             int winCount = 0;
             int totalGames = 0;
-
 
             while (CardLine.Count > 0) 
             {
