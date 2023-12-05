@@ -325,46 +325,51 @@ namespace wefwef
             var input = File.ReadAllLines("input5-2023.txt");
             string[] seedsStrings = input[0].Split(' ');
             List<long> seeds = new List<long>();
-            List<long> locations = new List<long>();
             bool skipTillNextMap = false;
 
-            for (int i = 1; i < seedsStrings.Length; i+=2)
+            long currentLocation = 26000000;
+            long index = 26000000;
+            while (true)
             {
-                for(int j = 0; j < long.Parse(seedsStrings[i + 1]); j++)
+                for (int j = input.Length-1; j > 0; j--)
                 {
-					seeds.Add(long.Parse(seedsStrings[i]) + j);
-				}
-            }
-
-            foreach (long i in seeds)
-            {
-                long currentSeed = i;
-                for(int j = 1; j < input.Length; j++)
-                {
-                    if (input[j] == "")
+                    if (input[j].Contains('-'))
                     {
-                        j++;
+                        j--;
                         skipTillNextMap = false;
                         continue;
                     }
                     else
                     {
                         string[] numbers = input[j].Split();
+                        long temp = long.Parse(numbers[0]) - long.Parse(numbers[1]);
+                        temp = currentLocation - temp;
 
-                        if (currentSeed >= long.Parse(numbers[1]) && currentSeed < long.Parse(numbers[1]) + long.Parse(numbers[2]) && !skipTillNextMap)
+                        if (temp >= long.Parse(numbers[1]) && temp < long.Parse(numbers[1]) + long.Parse(numbers[2]) && !skipTillNextMap)
                         {
-                            currentSeed = currentSeed + (long.Parse(numbers[0]) - long.Parse(numbers[1]));
+                            currentLocation = temp;
                             skipTillNextMap = true;
-						}
+                        }
                     }
                 }
-                locations.Add(currentSeed);
+
+                for(int j = 1; j < seedsStrings.Length; j += 2) 
+                {
+                    long from = long.Parse(seedsStrings[j]);
+                    long to = (long.Parse(seedsStrings[j]) + long.Parse(seedsStrings[j + 1]));
+                    if (currentLocation >= from && currentLocation < to)
+                    {
+                        Console.WriteLine(index);
+                    }
+                }
+
+                index++;
+                if(index % 1000000 == 0)
+                {
+                    Console.WriteLine(index);
+                }
+                currentLocation = index;
             }
-
-
-
-            Console.WriteLine(locations.Min());
-
         }
     }
 }
