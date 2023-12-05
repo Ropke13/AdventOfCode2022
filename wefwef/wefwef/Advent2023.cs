@@ -194,7 +194,7 @@ namespace wefwef
                                 if (input[lineNumber + 1][i - 1] == '*' && !Char.IsNumber(input[lineNumber + 1][i - 1]))
                                 {
                                     addNumber = false;
-                                    forGear = Tuple.Create(lineNumber+1, i-1);
+                                    forGear = Tuple.Create(lineNumber + 1, i - 1);
                                 }
                             }
                         }
@@ -212,7 +212,7 @@ namespace wefwef
                                 if (input[lineNumber - 1][i - 1] == '*' && !Char.IsNumber(input[lineNumber - 1][i - 1]))
                                 {
                                     addNumber = false;
-                                    forGear = Tuple.Create(lineNumber-1, i - 1);
+                                    forGear = Tuple.Create(lineNumber - 1, i - 1);
                                 }
                             }
                         }
@@ -223,7 +223,7 @@ namespace wefwef
                             if (line[i + 1] == '*' && !Char.IsNumber(line[i + 1]))
                             {
                                 addNumber = false;
-                                forGear = Tuple.Create(lineNumber, i+1);
+                                forGear = Tuple.Create(lineNumber, i + 1);
                             }
 
                             if (lineNumber != input.Length - 1)
@@ -258,9 +258,9 @@ namespace wefwef
 
             var sortedNumbers = numbers.OrderBy(f => f.Gear).ToList();
 
-            for (int i = 0; i < sortedNumbers.Count-1; i++)
-            { 
-                if(sortedNumbers[i].Gear.ToString() == sortedNumbers[i + 1].Gear.ToString())
+            for (int i = 0; i < sortedNumbers.Count - 1; i++)
+            {
+                if (sortedNumbers[i].Gear.ToString() == sortedNumbers[i + 1].Gear.ToString())
                 {
                     sum += int.Parse(sortedNumbers[i].Number) * int.Parse(sortedNumbers[i + 1].Number);
                     //Console.WriteLine("{0}-{1}     {2}-{3}    {4}", sortedNumbers[i].Number, sortedNumbers[i].Gear.ToString(), sortedNumbers[i + 1].Number, sortedNumbers[i + 1].Gear.ToString(), sum);
@@ -272,11 +272,11 @@ namespace wefwef
 
         public static void Day4()
         {
-			var input = File.ReadAllLines("input4-2023.txt");
+            var input = File.ReadAllLines("input4-2023.txt");
 
             List<int> CardLine = new List<int>();
 
-            for(int i = 1; i <= input.Length; i++)
+            for (int i = 1; i <= input.Length; i++)
             {
                 CardLine.Add(i);
             }
@@ -284,40 +284,79 @@ namespace wefwef
             int winCount = 0;
             int totalGames = 0;
 
-            while (CardLine.Count > 0) 
+            while (CardLine.Count > 0)
             {
                 int currentGame = CardLine[0];
                 CardLine.RemoveAt(0);
                 totalGames++;
 
-				string[] splitgame = input[currentGame-1].Split(new[] { ": " }, StringSplitOptions.None);
-				string[] splitWinAndCurrNumbers = splitgame[1].Split(new[] { " | " }, StringSplitOptions.None);
-				string[] winningNumbers = splitWinAndCurrNumbers[0].Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
-				string[] myNumbers = splitWinAndCurrNumbers[1].Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
+                string[] splitgame = input[currentGame - 1].Split(new[] { ": " }, StringSplitOptions.None);
+                string[] splitWinAndCurrNumbers = splitgame[1].Split(new[] { " | " }, StringSplitOptions.None);
+                string[] winningNumbers = splitWinAndCurrNumbers[0].Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
+                string[] myNumbers = splitWinAndCurrNumbers[1].Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
 
-				for (int i = 0; i < winningNumbers.Length; i++)
-				{
-					for (int j = 0; j < myNumbers.Length; j++)
-					{
-						if (winningNumbers[i] == myNumbers[j])
-						{
-                            winCount++;
-						}
-					}
-				}
-
-                for(int j = winCount; j > 0; j--)
+                for (int i = 0; i < winningNumbers.Length; i++)
                 {
-                    if(j + currentGame <= input.Length)
+                    for (int j = 0; j < myNumbers.Length; j++)
                     {
-						CardLine.Insert(0, j + currentGame);
-					}
+                        if (winningNumbers[i] == myNumbers[j])
+                        {
+                            winCount++;
+                        }
+                    }
+                }
+
+                for (int j = winCount; j > 0; j--)
+                {
+                    if (j + currentGame <= input.Length)
+                    {
+                        CardLine.Insert(0, j + currentGame);
+                    }
                 }
 
                 winCount = 0;
-			}
+            }
 
             Console.WriteLine(totalGames);
-		}
+        }
+
+        public static void Day5()
+        {
+            var input = File.ReadAllLines("input5-2023.txt");
+            string[] seedsStrings = input[0].Split(' ');
+            List<long> seeds = new List<long>();
+            bool skipTillNextMap = false;
+
+            for (int i = 1; i < seedsStrings.Length; i++)
+            {
+                seeds.Add(long.Parse(seedsStrings[i]));
+            }
+
+            foreach (long i in seeds)
+            {
+                long currentSeed = i;
+                for(int j = 1; j < input.Length; j++)
+                {
+                    if (input[j] == "")
+                    {
+                        j++;
+                        continue;
+                    }
+                    else
+                    {
+                        string[] numbers = input[j].Split();
+
+                        if (currentSeed >= long.Parse(numbers[1]) && currentSeed < long.Parse(numbers[1]) + long.Parse(numbers[2]))
+                        {
+                            currentSeed = currentSeed + (long.Parse(numbers[0]) - long.Parse(numbers[1]));
+						}
+                    }
+
+                }
+            }
+
+            Console.WriteLine(seeds);
+
+        }
     }
 }
