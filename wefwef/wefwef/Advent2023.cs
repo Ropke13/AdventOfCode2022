@@ -325,11 +325,15 @@ namespace wefwef
             var input = File.ReadAllLines("input5-2023.txt");
             string[] seedsStrings = input[0].Split(' ');
             List<long> seeds = new List<long>();
+            List<long> locations = new List<long>();
             bool skipTillNextMap = false;
 
-            for (int i = 1; i < seedsStrings.Length; i++)
+            for (int i = 1; i < seedsStrings.Length; i+=2)
             {
-                seeds.Add(long.Parse(seedsStrings[i]));
+                for(int j = 0; j < long.Parse(seedsStrings[i + 1]); j++)
+                {
+					seeds.Add(long.Parse(seedsStrings[i]) + j);
+				}
             }
 
             foreach (long i in seeds)
@@ -340,22 +344,26 @@ namespace wefwef
                     if (input[j] == "")
                     {
                         j++;
+                        skipTillNextMap = false;
                         continue;
                     }
                     else
                     {
                         string[] numbers = input[j].Split();
 
-                        if (currentSeed >= long.Parse(numbers[1]) && currentSeed < long.Parse(numbers[1]) + long.Parse(numbers[2]))
+                        if (currentSeed >= long.Parse(numbers[1]) && currentSeed < long.Parse(numbers[1]) + long.Parse(numbers[2]) && !skipTillNextMap)
                         {
                             currentSeed = currentSeed + (long.Parse(numbers[0]) - long.Parse(numbers[1]));
+                            skipTillNextMap = true;
 						}
                     }
-
                 }
+                locations.Add(currentSeed);
             }
 
-            Console.WriteLine(seeds);
+
+
+            Console.WriteLine(locations.Min());
 
         }
     }
