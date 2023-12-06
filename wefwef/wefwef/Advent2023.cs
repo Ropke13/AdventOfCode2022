@@ -371,5 +371,30 @@ namespace wefwef
                 currentLocation = index;
             }
         }
+
+        public static void Day6()
+        {
+			var input = File.ReadAllLines("input6-2023.txt");
+            long score = 1;
+
+            string[] times = input[0].Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
+            string[] distances = input[1].Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
+
+            for(long i = 1; i < times.Length; i++) 
+            {
+                var currentTime = long.Parse(times[i]);
+                var currentDistance = long.Parse(distances[i]);
+                var betterDistance = 0;
+
+                for(long j = 0; j <= currentTime; j++)
+                {
+                    if (j * (currentTime - j) > currentDistance) betterDistance++;
+                }
+
+                score *= betterDistance;
+
+                Console.WriteLine(score);
+            }
+		}
     }
 }
