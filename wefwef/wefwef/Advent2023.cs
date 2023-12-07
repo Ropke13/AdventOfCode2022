@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -396,5 +398,194 @@ namespace wefwef
                 Console.WriteLine(score);
             }
 		}
+
+        public class Hand
+        {
+            public string Cards { get; set; }
+            public int HandType { get; set; }
+            public int Score { get; set; }
+            public Hand(string hand, int handType, int score)
+            {
+                Cards = hand;
+                HandType = handType;
+                Score = score;
+            }
+        }
+        //245554747 Too High
+        public static void Day7()
+        {
+            var input = File.ReadAllLines("input7-2023.txt");
+
+            List<Hand> items = new List<Hand>();
+
+            foreach(var line in input)
+            {
+                string[] parts = line.Split();
+                Hand item = null;
+                if (Is5Kind(parts[0]))
+                {
+                    item = new Hand(parts[0], 7, int.Parse(parts[1]));
+                }
+                else if (Is4Kind(parts[0]))
+                {
+                    item = new Hand(parts[0], 6, int.Parse(parts[1]));
+                }
+                else if (IsFullHouse(parts[0]))
+                {
+                    item = new Hand(parts[0], 5, int.Parse(parts[1]));
+                }
+                else if (Is3Kind(parts[0]))
+                {
+                    item = new Hand(parts[0], 4, int.Parse(parts[1]));
+                }
+                else if (Is2Pair(parts[0]))
+                {
+                    item = new Hand(parts[0], 3, int.Parse(parts[1]));
+                }
+                else if (Is1Pair(parts[0]))
+                {
+                    item = new Hand(parts[0], 2, int.Parse(parts[1]));
+                }
+                else
+                {
+                    item = new Hand(parts[0], 1, int.Parse(parts[1]));
+                }
+
+                items.Add(item);
+
+                
+            }
+            List<char> value = new List<char>() { 'J', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'Q', 'K', 'A' };
+            Console.Clear();
+            var sorted = items.OrderBy(f => f.HandType)
+                              .ThenBy(f => value.IndexOf(f.Cards[0]))
+                              .ThenBy(f => value.IndexOf(f.Cards[1]))
+                              .ThenBy(f => value.IndexOf(f.Cards[2]))
+                              .ThenBy(f => value.IndexOf(f.Cards[3]))
+                              .ThenBy(f => value.IndexOf(f.Cards[4]))
+                              .ToList();
+            int answer = 0;
+
+            for (int i = 0; i < sorted.Count; i++)
+            {
+                Console.WriteLine("Current hand: {0}, handType: {1}", sorted[i].Cards, sorted[i].HandType);
+                answer += sorted[i].Score * (i + 1);
+            }
+
+            Console.Write(answer);
+
+            bool Is5Kind(string hand)
+            {
+                List<char> list = hand.ToList();
+                int count = list.Count(c => c == 'J');
+                list.Sort();
+                var g = list.GroupBy(i => i);
+                foreach (var grp in g)
+                {
+                    if (grp.Key != 'J' && grp.Count() + count == 5)
+                    { 
+                        return true;
+                    }
+                }
+                return false;
+            }
+            bool Is4Kind(string hand)
+            {
+                List<char> list = hand.ToList();
+                int count = list.Count(c => c == 'J');
+                list.Sort();
+                var g = list.GroupBy(i => i);
+                foreach (var grp in g)
+                {
+                    if (grp.Key != 'J' && grp.Count() + count == 4)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            bool IsFullHouse(string hand)
+            {
+                List<char> list = new List<char>();
+                int count = list.Count(c => c == 'J');
+                if(count > 1)
+                {
+                    return false;
+                }
+                for (int i = 0;i < hand.Length; i++)
+                {
+                    if (!list.Contains(hand[i]) && hand[i] != 'J')
+                    {
+                        list.Add(hand[i]);
+                    }
+                }
+
+                if(list.Count > 2) return false;
+
+                return true;
+            }
+            bool Is3Kind(string hand)
+            {
+                List<char> list = hand.ToList();
+                int count = list.Count(c => c == 'J');
+                list.Sort();
+                var g = list.GroupBy(i => i);
+                foreach (var grp in g)
+                {
+                    if(grp.Key != 'J' && grp.Count() + count == 3)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            bool Is2Pair(string hand)
+            {
+                int pairs = 0;
+                List<char> list = hand.ToList();
+                int count = list.Count(c => c == 'J');
+                if (count > 0)
+                {
+                    return false;
+                }
+                list.Sort();
+                var g = list.GroupBy(i => i);
+                foreach (var grp in g)
+                {
+                    if (grp.Count() == 2)
+                    {
+                        pairs++;
+                    }
+                }
+
+                if(pairs == 2) return true;
+
+                return false;
+            }
+            bool Is1Pair(string hand)
+            {
+                int pairs = 0;
+                List<char> list = hand.ToList();
+                int count = list.Count(c => c == 'J');
+                if (count > 0)
+                {
+                    return true;
+                }
+                list.Sort();
+                var g = list.GroupBy(i => i);
+                foreach (var grp in g)
+                {
+                    if (grp.Count() == 2)
+                    {
+                        pairs++;
+                    }
+                }
+
+                if (pairs == 1) return true;
+
+                return false;
+            }
+        }
     }
 }
