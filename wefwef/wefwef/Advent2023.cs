@@ -421,6 +421,7 @@ namespace wefwef
             foreach(var line in input)
             {
                 string[] parts = line.Split();
+                Console.WriteLine("Current hand {0}", parts[0]);
                 Hand item = null;
                 if (Is5Kind(parts[0]))
                 {
@@ -478,6 +479,7 @@ namespace wefwef
             {
                 List<char> list = hand.ToList();
                 int count = list.Count(c => c == 'J');
+                if (count == 5) return true;
                 list.Sort();
                 var g = list.GroupBy(i => i);
                 foreach (var grp in g)
