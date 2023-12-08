@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace wefwef
@@ -411,7 +412,7 @@ namespace wefwef
                 Score = score;
             }
         }
-        //245554747 Too High
+
         public static void Day7()
         {
             var input = File.ReadAllLines("input7-2023.txt");
@@ -588,6 +589,92 @@ namespace wefwef
 
                 return false;
             }
+        }
+        class Node
+        {
+            public string Location { get; set; }
+            public string LeftNode { get; set; }
+            public string RightNode { get; set; }
+
+            public Node(string location, string leftNode, string rigthNode)
+            {
+                Location = location;
+                LeftNode = leftNode;
+                RightNode = rigthNode;
+            }
+        }
+        public static void Day8()
+        {
+            var input = File.ReadAllLines("input8-2023.txt");
+
+            List<Char> Instructions = input[0].ToList();
+            List<Node> paths = new List<Node>();
+
+            bool foundZZZ = false;
+
+            for (int i = 2; i < input.Length; i++)
+            {
+                string[] parts = input[i].Split(new[] { " = " }, StringSplitOptions.None);
+                parts[1] = parts[1].Substring(1, parts[1].Length - 2);
+                string[] leftRight = parts[1].Split(new[] { ", " }, StringSplitOptions.None);
+
+                Node item = new Node(parts[0], leftRight[0], leftRight[1]);
+
+                paths.Add(item);
+            }
+
+            int index = 0;
+            List<Node> curentNodes = paths.Where(f => f.Location[2] == 'A').ToList();
+            string nextLocation;
+            int totalSteps = 0;
+            List<long> steps = new List<long>();
+
+            foreach(Node node in curentNodes)
+            {
+                Node temp = node;
+                index = 0;
+                totalSteps = 0;
+                while (!foundZZZ)
+                {
+                    if (index > Instructions.Count - 1) index = 0;
+                    Char currentInstruction = Instructions[index];
+
+                    if (currentInstruction == 'L')
+                    {
+                        totalSteps++;
+                        nextLocation = temp.LeftNode;
+                    }
+                    else
+                    {
+                        totalSteps++;
+                        nextLocation = temp.RightNode;
+                    }
+
+                    temp = paths.FirstOrDefault(f => f.Location == nextLocation);
+
+                    if (nextLocation[2] == 'Z') break;
+                    index++;
+                }
+
+                steps.Add(totalSteps);
+            }
+
+            long LCM = steps[0];
+            int muliple = 1;
+            bool found = false;
+
+            while (!found)
+            {
+                LCM = steps[0] * muliple;
+                found = true;
+                foreach (var step in steps)
+                {
+                    if (LCM % step != 0) found = false;
+                }
+                muliple++;
+            }
+
+            Console.Write(LCM);
         }
     }
 }
