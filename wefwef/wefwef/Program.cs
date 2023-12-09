@@ -9,20 +9,8 @@ namespace wefwef
     {
         static void Main(string[] args)
         {
-            //oldadvent.A2015Day7();
-
-            //oldadvent.A2020Day3();
-
-            //Advent.Day7();
-            //Advent.Day8();
-            //Advent.Day9();
-            //Advent.Day10();
-            //Advent.Day11();
-            //Advent.Day12();
-            //Advent.Day13();
-            //Advent.Day14();
-            //Advent2023.Day1();
-            Advent2023.Day8();
+            //oldadvent.A2018Day2();
+            Advent2023.Day10();
 
             Console.ReadLine();
         }

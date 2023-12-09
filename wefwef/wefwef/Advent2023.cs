@@ -334,7 +334,7 @@ namespace wefwef
             long index = 26000000;
             while (true)
             {
-                for (int j = input.Length-1; j > 0; j--)
+                for (int j = input.Length - 1; j > 0; j--)
                 {
                     if (input[j].Contains('-'))
                     {
@@ -356,7 +356,7 @@ namespace wefwef
                     }
                 }
 
-                for(int j = 1; j < seedsStrings.Length; j += 2) 
+                for (int j = 1; j < seedsStrings.Length; j += 2)
                 {
                     long from = long.Parse(seedsStrings[j]);
                     long to = (long.Parse(seedsStrings[j]) + long.Parse(seedsStrings[j + 1]));
@@ -367,7 +367,7 @@ namespace wefwef
                 }
 
                 index++;
-                if(index % 1000000 == 0)
+                if (index % 1000000 == 0)
                 {
                     Console.WriteLine(index);
                 }
@@ -377,19 +377,19 @@ namespace wefwef
 
         public static void Day6()
         {
-			var input = File.ReadAllLines("input6-2023.txt");
+            var input = File.ReadAllLines("input6-2023.txt");
             long score = 1;
 
             string[] times = input[0].Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
             string[] distances = input[1].Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
 
-            for(long i = 1; i < times.Length; i++) 
+            for (long i = 1; i < times.Length; i++)
             {
                 var currentTime = long.Parse(times[i]);
                 var currentDistance = long.Parse(distances[i]);
                 var betterDistance = 0;
 
-                for(long j = 0; j <= currentTime; j++)
+                for (long j = 0; j <= currentTime; j++)
                 {
                     if (j * (currentTime - j) > currentDistance) betterDistance++;
                 }
@@ -398,7 +398,7 @@ namespace wefwef
 
                 Console.WriteLine(score);
             }
-		}
+        }
 
         public class Hand
         {
@@ -419,7 +419,7 @@ namespace wefwef
 
             List<Hand> items = new List<Hand>();
 
-            foreach(var line in input)
+            foreach (var line in input)
             {
                 string[] parts = line.Split();
                 Console.WriteLine("Current hand {0}", parts[0]);
@@ -455,7 +455,7 @@ namespace wefwef
 
                 items.Add(item);
 
-                
+
             }
             List<char> value = new List<char>() { 'J', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'Q', 'K', 'A' };
             Console.Clear();
@@ -486,7 +486,7 @@ namespace wefwef
                 foreach (var grp in g)
                 {
                     if (grp.Key != 'J' && grp.Count() + count == 5)
-                    { 
+                    {
                         return true;
                     }
                 }
@@ -512,11 +512,11 @@ namespace wefwef
             {
                 List<char> list = new List<char>();
                 int count = list.Count(c => c == 'J');
-                if(count > 1)
+                if (count > 1)
                 {
                     return false;
                 }
-                for (int i = 0;i < hand.Length; i++)
+                for (int i = 0; i < hand.Length; i++)
                 {
                     if (!list.Contains(hand[i]) && hand[i] != 'J')
                     {
@@ -524,7 +524,7 @@ namespace wefwef
                     }
                 }
 
-                if(list.Count > 2) return false;
+                if (list.Count > 2) return false;
 
                 return true;
             }
@@ -536,7 +536,7 @@ namespace wefwef
                 var g = list.GroupBy(i => i);
                 foreach (var grp in g)
                 {
-                    if(grp.Key != 'J' && grp.Count() + count == 3)
+                    if (grp.Key != 'J' && grp.Count() + count == 3)
                     {
                         return true;
                     }
@@ -562,7 +562,7 @@ namespace wefwef
                     }
                 }
 
-                if(pairs == 2) return true;
+                if (pairs == 2) return true;
 
                 return false;
             }
@@ -629,7 +629,7 @@ namespace wefwef
             int totalSteps = 0;
             List<long> steps = new List<long>();
 
-            foreach(Node node in curentNodes)
+            foreach (Node node in curentNodes)
             {
                 Node temp = node;
                 index = 0;
@@ -658,23 +658,66 @@ namespace wefwef
 
                 steps.Add(totalSteps);
             }
+        }
 
-            long LCM = steps[0];
-            int muliple = 1;
-            bool found = false;
+        public static void Day9()
+        {
+            var input = File.ReadAllLines("input9-2023.txt");
 
-            while (!found)
+            long sum = 0;
+
+            foreach(var line in input)
             {
-                LCM = steps[0] * muliple;
-                found = true;
-                foreach (var step in steps)
+                string[] parts = line.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
+
+                Console.WriteLine(line);
+
+                List<long> temp = new List<long>();
+                List<List<long>> steps = new List<List<long>>();
+                bool isAllZero = false;
+                int index = 0;
+
+                foreach (var part in parts)
                 {
-                    if (LCM % step != 0) found = false;
+                    temp.Add(long.Parse(part));
                 }
-                muliple++;
+
+                steps.Add(temp);
+
+                while (!isAllZero)
+                {
+                    List<long> nextLine = new List<long>();
+                    isAllZero = true;
+                    for (int i = 0; i < steps[index].Count-1; i++)
+                    {
+                        nextLine.Add(steps[index][i + 1] - steps[index][i]);
+                        if(steps[index][i + 1] - steps[index][i] != 0) isAllZero = false;
+                    }
+
+                    steps.Add(nextLine);
+                    index++;
+                }
+
+                int returnI = steps.Count-1;
+                List<long> currentLine = steps[returnI];
+                currentLine.Insert(0, 0);
+
+                while (returnI > 0)
+                {
+                    List<long> next = steps[returnI-1];
+                    next.Insert(0, next.First() - steps[returnI].First());
+                    returnI--;
+                }
+
+                sum += steps[0].First();
             }
 
-            Console.Write(LCM);
+            Console.WriteLine(sum);
+        }
+
+        internal static void Day10()
+        {
+            var input = File.ReadAllLines("input10-2023.txt");
         }
     }
 }

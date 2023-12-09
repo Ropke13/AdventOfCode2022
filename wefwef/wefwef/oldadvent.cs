@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using static wefwef.Advent2023;
+using static wefwef.Advent2022;
 
 namespace wefwef
 {
@@ -103,6 +105,35 @@ namespace wefwef
             }
 
             return answer;
+        }
+
+        public static void A2018Day2()
+        {
+            var input = File.ReadAllLines("2018.txt");
+            int count = 0;
+
+            for (int i = 0; i < input.Length-1; i++)
+            {
+                for(int j = i+1; j < input.Length; j++)
+                {
+                    for(int l = 0; l < input[i].Length; l++) 
+                    {
+                        if (input[i][l] != input[j][l]) count++;
+
+                        if (count > 1) break;
+                    }
+
+                    if (count == 1)
+                    {
+                        Console.WriteLine(input[i]);
+                        Console.WriteLine(input[j]);
+                    }
+
+                    count = 0;
+                }
+            }
+
+            //Console.WriteLine(count1 * count2);
         }
 
 
