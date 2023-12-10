@@ -327,7 +327,6 @@ namespace wefwef
         {
             var input = File.ReadAllLines("input5-2023.txt");
             string[] seedsStrings = input[0].Split(' ');
-            List<long> seeds = new List<long>();
             bool skipTillNextMap = false;
 
             long currentLocation = 26000000;
@@ -812,7 +811,6 @@ namespace wefwef
 
                                 if(valid.Count != 0 && valid.Count % 2 != 0)
                                 {
-                                    //Draw(input, HeadList);
                                     inLoopTiles++;
                                     Head item = new Head(l, k);
                                     inLoopTile.Add(item);
@@ -848,7 +846,36 @@ namespace wefwef
                         if (inl.Any(f => f.y == y && f.x == x)){
                             Console.ForegroundColor = ConsoleColor.DarkYellow;
                         }
-                        Console.Write(inputa[y][x]);
+
+                        if(inputa[y][x] == 'L')
+                        {
+                            Console.Write("└");
+                        }
+                        else if (inputa[y][x] == 'J')
+                        {
+                            Console.Write("┘");
+                        }
+                        else if (inputa[y][x] == '7')
+                        {
+                            Console.Write("┐");
+                        }
+                        else if (inputa[y][x] == 'F')
+                        {
+                            Console.Write("┌");
+                        }
+                        else if (input[y][x] == '-')
+                        {
+                            Console.Write("─");
+                        }
+                        else if (input[y][x] == '|')
+                        {
+                            Console.Write("│");
+                        }
+                        else
+                        {
+                            Console.Write(inputa[y][x]);
+                        }
+                        
                         Console.ForegroundColor = ConsoleColor.White;
                     }
                     Console.WriteLine();

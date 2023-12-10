@@ -109,7 +109,7 @@ namespace wefwef
             int bot = 0;
             int left = 0;
 
-            int score = 0;
+            int score;
             int answer = 0;
 
             for(int i = 1; i < 98; i++)
@@ -251,7 +251,7 @@ namespace wefwef
             var lines = File.ReadAllLines("input10.txt");
 
             List<string> drawing = new List<string>();
-            List<int> ints = new List<int>();
+            List<int> ints;
 
             int currentCycle = 1;
             int amount = 0;

@@ -7,11 +7,12 @@ namespace wefwef
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             //oldadvent.A2018Day2();
             Advent2023.Day10();
 
+            Console.WriteLine("YEY!");
             Console.ReadLine();
         }
     }
