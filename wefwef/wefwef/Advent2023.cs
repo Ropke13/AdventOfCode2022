@@ -715,9 +715,145 @@ namespace wefwef
             Console.WriteLine(sum);
         }
 
+        class Head
+        {
+            public int x { get; set; }
+            public int y { get; set; }
+
+            public Head(int x, int y)
+            {
+                this.x = x;
+                this.y = y;
+            }
+        }
         internal static void Day10()
         {
-            var input = File.ReadAllLines("input10-2023.txt");
+            var input = File.ReadAllLines("input10-2023.txt").ToArray();
+            Head StartingPossition = null;
+            List<Head> HeadList = new List<Head>();
+
+            for (int y = 0; y < input.Length; y++) 
+            {
+                for(int x = 0; x < input[y].Length; x++)
+                {
+                    if (input[y][x] == 'S')
+                    {
+                        StartingPossition = new Head(x, y);
+                        break;
+                    }
+                }
+                if (StartingPossition != null) break;
+            }
+
+            HeadList.Add(StartingPossition);
+
+            int Y = StartingPossition.y;
+            int X = StartingPossition.x;
+            char[] toNorth = new char[] { '|', 'L', 'J', 'S' };
+            char[] toShouth = new char[] { '|', '7', 'F', 'S' };
+            char[] toWest = new char[] { '-', 'J', '7', 'S' };
+            char[] toEast = new char[] { '-', 'F', 'L', 'S' };
+
+            char CP = 'S';
+
+            while (true)
+            {
+                if (Y != 0 && (input[Y - 1][X] == '|' || input[Y - 1][X] == 'F' || input[Y - 1][X] == '7') && !HeadList.Any(f => f.y == Y - 1 && f.x == X) && toNorth.Contains(CP))
+                {
+                    Y--;
+                    Head found = new Head(X, Y);
+                    HeadList.Add(found);
+                    CP = input[Y][X];
+                }
+                else if (Y != input.Length - 1 && (input[Y + 1][X] == '|' || input[Y + 1][X] == 'L' || input[Y + 1][X] == 'J') && !HeadList.Any(f => f.y == Y + 1 && f.x == X) && toShouth.Contains(CP))
+                {
+                    Y++;
+                    Head found = new Head(X, Y);
+                    HeadList.Add(found);
+                    CP = input[Y][X];
+                }
+
+                else if (X != 0 && (input[Y][X - 1] == '-' || input[Y][X - 1] == 'F' || input[Y][X - 1] == 'L') && !HeadList.Any(f => f.y == Y && f.x == X - 1) && toWest.Contains(CP))
+                {
+                    X--;
+                    Head found = new Head(X, Y);
+                    HeadList.Add(found);
+                    CP = input[Y][X];
+                }
+
+                else if (X != input[Y].Length - 1 && (input[Y][X + 1] == '-' || input[Y][X + 1] == '7' || input[Y][X + 1] == 'J') && !HeadList.Any(f => f.y == Y && f.x == X + 1) && toEast.Contains(CP))
+                {
+                    X++;
+                    Head found = new Head(X, Y);
+                    HeadList.Add(found);
+                    CP = input[Y][X];
+                }
+                else
+                {
+                    List<Head> inLoopTile = new List<Head>();
+                    int inLoopTiles = 0;
+                    char[] check = new char[] { '|', 'J', 'L', 'S' };                  
+
+                    for (int k = 0; k < input.Length; k++)
+                    {
+                        for (int l = 0; l < input[k].Length; l++)
+                        {
+                            if(!HeadList.Any(f => f.y == k && f.x == l))
+                            {
+                                List<Head> valid = new List<Head>();
+                                var count = HeadList.Where(f => f.y == k && f.x <= l).ToList();
+                                foreach (var c in count)
+                                {
+                                    if (check.Contains(input[c.y][c.x]))
+                                    {
+                                        valid.Add(c);
+                                    }
+                                }
+
+                                if(valid.Count != 0 && valid.Count % 2 != 0)
+                                {
+                                    //Draw(input, HeadList);
+                                    inLoopTiles++;
+                                    Head item = new Head(l, k);
+                                    inLoopTile.Add(item);
+                                }
+                            }
+                        }
+                    }
+                    Draw(input, inLoopTile);
+                    Console.WriteLine("Total steps: {0}.,    Halfway: {1}.", HeadList.Count, HeadList.Count / 2);
+                    Console.WriteLine("Total Closed in Loop Tiles: {0}.", inLoopTiles);
+                    break;
+                }
+            }
+
+            void Draw(string[] inputa, List<Head> inl)
+            {
+                for (int y = 0; y < inputa.Length; y++)
+                {
+                    for(int x = 0; x < inputa[y].Length; x++)
+                    {
+                        if (HeadList.Any(f => f.y == y && f.x == x))
+                        {
+                            Console.ForegroundColor = ConsoleColor.Green;
+                        } 
+                        if (HeadList.Last().y == y && HeadList.Last().x == x)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                        }
+                        if (inputa[y][x] == 'S')
+                        {
+                            Console.ForegroundColor = ConsoleColor.Magenta;
+                        }
+                        if (inl.Any(f => f.y == y && f.x == x)){
+                            Console.ForegroundColor = ConsoleColor.DarkYellow;
+                        }
+                        Console.Write(inputa[y][x]);
+                        Console.ForegroundColor = ConsoleColor.White;
+                    }
+                    Console.WriteLine();
+                }
+            }
         }
     }
 }
