@@ -10,7 +10,7 @@ namespace wefwef
         static void Main()
         {
             //oldadvent.A2018Day2();
-            Advent2023.Day10();
+            Advent2023.Day11();
 
             Console.WriteLine("YEY!");
             Console.ReadLine();

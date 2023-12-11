@@ -882,5 +882,62 @@ namespace wefwef
                 }
             }
         }
+
+        class Galaxy
+        {
+            public int Id { get; set; }
+            public int X { get; set; }
+            public int Y { get; set; }
+
+            public Galaxy(int id, int x, int y)
+            {
+                Id = id;
+                X = x;
+                Y = y;
+            }
+        }
+        internal static void Day11()
+        {
+            var input = File.ReadAllLines("input11-2023.txt").ToArray();
+
+            List<List<char>> charMatrix = new List<List<char>>();
+            List<Galaxy> galaxies = new List<Galaxy>();
+
+            Console.WriteLine("Scanning rows");
+            //scan for rows
+            for (int i = 0; i < input.Length; i++)
+            {
+                charMatrix.Add(input[i].ToList());
+            }
+
+            //Find x and y for every galaxy
+            int id = 1;
+            for (int i = 0; i < charMatrix.Count; i++)
+            {
+                for(int j = 0; j < charMatrix[i].Count; j++)
+                {
+                    if (charMatrix[i][j] == '#')
+                    {
+                        Galaxy item = new Galaxy(id++, j, i);
+                        galaxies.Add(item);
+                    }
+                }
+            }
+
+            Console.WriteLine("Calculating distances");
+            int sum = 0;
+            //find all pairs and calulate distance sums
+            for (int i = 0; i < galaxies.Count -1 ; i++)
+            {
+                for (int j = i+1; j < galaxies.Count; j++)
+                {
+                    Console.WriteLine("{0}   {1}", galaxies[i].Id, galaxies[j].Id);
+                    int distance = Math.Abs(Math.Abs(galaxies[j].X - galaxies[i].X) + Math.Abs(galaxies[j].Y - galaxies[i].Y));
+                    sum += distance;
+                }
+            }
+
+            Console.WriteLine(sum);
+        }
     }
 }
