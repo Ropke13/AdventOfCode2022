@@ -899,40 +899,53 @@ namespace wefwef
         internal static void Day11()
         {
             var input = File.ReadAllLines("input11-2023.txt").ToArray();
-
-            List<List<char>> charMatrix = new List<List<char>>();
             List<Galaxy> galaxies = new List<Galaxy>();
 
-            Console.WriteLine("Scanning rows");
-            //scan for rows
+            int id = 1;
+            int xCrossings = 0;
+            int yCrossings = 0;
             for (int i = 0; i < input.Length; i++)
             {
-                charMatrix.Add(input[i].ToList());
-            }
-
-            //Find x and y for every galaxy
-            int id = 1;
-            for (int i = 0; i < charMatrix.Count; i++)
-            {
-                for(int j = 0; j < charMatrix[i].Count; j++)
+                for(int j = 0; j < input[i].Length; j++)
                 {
-                    if (charMatrix[i][j] == '#')
+                    if (!input[i].Contains('#'))
                     {
-                        Galaxy item = new Galaxy(id++, j, i);
+                        yCrossings++;
+                        break;
+                    }
+                    else if (input[i][j] == '#')
+                    {
+                        Galaxy item = new Galaxy(id++, j - xCrossings + (xCrossings * 1000000), i - yCrossings + (yCrossings * 1000000));
                         galaxies.Add(item);
                     }
+                    else
+                    {
+                        bool isEmpty = true;
+                        for(int x = 0; x < input.Length; x++)
+                        {
+                            if (input[x][j] == '#')
+                            {
+                                isEmpty = false;
+                                break;
+                            }
+                        }
+                        if (isEmpty)
+                        {
+                            xCrossings++;
+                        }
+                    }
                 }
+
+                xCrossings = 0;
             }
 
-            Console.WriteLine("Calculating distances");
-            int sum = 0;
-            //find all pairs and calulate distance sums
+            long sum = 0;
             for (int i = 0; i < galaxies.Count -1 ; i++)
             {
                 for (int j = i+1; j < galaxies.Count; j++)
                 {
                     Console.WriteLine("{0}   {1}", galaxies[i].Id, galaxies[j].Id);
-                    int distance = Math.Abs(Math.Abs(galaxies[j].X - galaxies[i].X) + Math.Abs(galaxies[j].Y - galaxies[i].Y));
+                    long distance = Math.Abs(Math.Abs(galaxies[j].X - galaxies[i].X) + Math.Abs(galaxies[j].Y - galaxies[i].Y));
                     sum += distance;
                 }
             }
