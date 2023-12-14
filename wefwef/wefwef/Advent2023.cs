@@ -953,9 +953,214 @@ namespace wefwef
             Console.WriteLine(sum);
         }
 
-        public static void Day12()
+        internal static void Day13()
         {
-			
-		}
+            var input = File.ReadAllLines("input13-2023.txt").ToList();
+            List<string> rows = new List<string>();
+
+            List<string> linesHorizontal = new List<string>();
+            List<string> linesVertical = new List<string>();
+
+            foreach (string line in input)
+            {
+                if (line != string.Empty)
+                {
+                    rows.Add(line);
+                }  
+            }
+
+        }
+
+        class Rock
+        {
+            public int X { get; set; }
+            public int Y { get; set; }
+
+            public Rock(int x, int y)
+            {
+                X = x;
+                Y = y;
+            }
+        }
+        public static void Day14()
+        {
+            Console.WriteLine("Reading file");
+            var input = File.ReadAllLines("input14-2023.txt");
+            List<Rock> rocksRound = new List<Rock>();
+            List<Rock> rocksSta = new List<Rock>();
+            int loadIndex = input.Length;
+            int forEastMax = input[0].Length - 1;
+            int sum = 0;
+
+            Console.WriteLine("Collecting rocks");
+            for(int i = 0; i < input.Length; i++)
+            {
+                for(int j = 0; j < input[i].Length; j++)
+                {
+                    if (input[i][j] == 'O')
+                    {
+                        Rock item = new Rock(j, i);
+                        rocksRound.Add(item);
+                    }
+                    if (input[i][j] == '#')
+                    {
+                        Rock item = new Rock(j, i);
+                        rocksSta.Add(item);
+                    }
+                }
+            }
+
+            Console.WriteLine("Sort round rocks for north");
+            var rocksRoundSorted = rocksRound.OrderBy(r => r.X).ThenBy(r => r.Y).ToList();
+
+            for(int k = 1; k <= 1000; k++)
+            {
+                //north
+                for (int i = 0; i < rocksRoundSorted.Count; i++)
+                {
+                    int currentX = rocksRoundSorted[i].X;
+                    if (rocksRoundSorted[i].Y == 0) continue;
+
+                    else if (rocksSta.Where(f => f.Y < rocksRoundSorted[i].Y && f.X == currentX).Count() > 0 || rocksRoundSorted.Where(f => f.Y < rocksRoundSorted[i].Y && f.X == currentX).Count() > 0)
+                    {
+                        int one = 0;
+                        int second = 0;
+
+                        var hastag = rocksSta.Where(f => f.Y < rocksRoundSorted[i].Y && f.X == currentX).ToList();
+                        if (hastag.Any())
+                        {
+                            one = hastag.Max(f => f.Y);
+                        }
+
+                        var ous = rocksRoundSorted.Where(f => f.Y < rocksRoundSorted[i].Y && f.X == currentX).ToList();
+                        if (ous.Any())
+                        {
+                            second = ous.Max(f => f.Y);
+                        }
+
+                        var answer = Math.Max(one, second);
+
+                        rocksRoundSorted[i].Y = answer + 1;
+                    }
+                    else
+                    {
+                        rocksRoundSorted[i].Y = 0;
+                    }
+                }
+
+
+                //west
+                rocksRoundSorted = rocksRoundSorted.OrderBy(r => r.Y).ThenBy(r => r.X).ToList();
+                for (int i = 0; i < rocksRoundSorted.Count; i++)
+                {
+                    int currentX = rocksRoundSorted[i].Y;
+                    if (rocksRoundSorted[i].X == 0) continue;
+
+                    else if (rocksSta.Where(f => f.X < rocksRoundSorted[i].X && f.Y == currentX).Count() > 0 || rocksRoundSorted.Where(f => f.X < rocksRoundSorted[i].X && f.Y == currentX).Count() > 0)
+                    {
+                        int one = 0;
+                        int second = 0;
+
+                        var hastag = rocksSta.Where(f => f.X < rocksRoundSorted[i].X && f.Y == currentX).ToList();
+                        if (hastag.Any())
+                        {
+                            one = hastag.Max(f => f.X);
+                        }
+
+                        var ous = rocksRoundSorted.Where(f => f.X < rocksRoundSorted[i].X && f.Y == currentX).ToList();
+                        if (ous.Any())
+                        {
+                            second = ous.Max(f => f.X);
+                        }
+
+                        var answer = Math.Max(one, second);
+
+                        rocksRoundSorted[i].X = answer + 1;
+                    }
+                    else
+                    {
+                        rocksRoundSorted[i].X = 0;
+                    }
+                }
+
+                //south
+                rocksRoundSorted = rocksRound.OrderBy(r => r.X).ThenByDescending(r => r.Y).ToList();
+
+                for (int i = 0; i < rocksRoundSorted.Count; i++)
+                {
+                    int currentX = rocksRoundSorted[i].X;
+                    if (rocksRoundSorted[i].Y == loadIndex - 1) continue;
+
+                    else if (rocksSta.Where(f => f.Y > rocksRoundSorted[i].Y && f.X == currentX).Count() > 0 || rocksRoundSorted.Where(f => f.Y > rocksRoundSorted[i].Y && f.X == currentX).Count() > 0)
+                    {
+                        int one = loadIndex - 1;
+                        int second = loadIndex - 1;
+
+                        var hastag = rocksSta.Where(f => f.Y > rocksRoundSorted[i].Y && f.X == currentX).ToList();
+                        if (hastag.Any())
+                        {
+                            one = hastag.Min(f => f.Y);
+                        }
+
+                        var ous = rocksRoundSorted.Where(f => f.Y > rocksRoundSorted[i].Y && f.X == currentX).ToList();
+                        if (ous.Any())
+                        {
+                            second = ous.Min(f => f.Y);
+                        }
+
+                        var answer = Math.Min(one, second);
+
+                        rocksRoundSorted[i].Y = answer - 1;
+                    }
+                    else
+                    {
+                        rocksRoundSorted[i].Y = loadIndex - 1;
+                    }
+                }
+
+                //east
+                rocksRoundSorted = rocksRoundSorted.OrderBy(r => r.Y).ThenByDescending(r => r.X).ToList();
+                for (int i = 0; i < rocksRoundSorted.Count; i++)
+                {
+                    int currentX = rocksRoundSorted[i].Y;
+                    if (rocksRoundSorted[i].X == forEastMax) continue;
+
+                    else if (rocksSta.Where(f => f.X > rocksRoundSorted[i].X && f.Y == currentX).Count() > 0 || rocksRoundSorted.Where(f => f.X > rocksRoundSorted[i].X && f.Y == currentX).Count() > 0)
+                    {
+                        int one = forEastMax;
+                        int second = forEastMax;
+
+                        var hastag = rocksSta.Where(f => f.X > rocksRoundSorted[i].X && f.Y == currentX).ToList();
+                        if (hastag.Any())
+                        {
+                            one = hastag.Min(f => f.X);
+                        }
+
+                        var ous = rocksRoundSorted.Where(f => f.X > rocksRoundSorted[i].X && f.Y == currentX).ToList();
+                        if (ous.Any())
+                        {
+                            second = ous.Min(f => f.X);
+                        }
+
+                        var answer = Math.Min(one, second);
+
+                        rocksRoundSorted[i].X = answer - 1;
+                    }
+                    else
+                    {
+                        rocksRoundSorted[i].X = forEastMax;
+                    }
+                }
+
+                Console.WriteLine(k);
+            }
+
+
+            foreach (var f in rocksRoundSorted)
+            {
+                sum += loadIndex - f.Y;
+            }
+            Console.WriteLine(sum);
+        }
     }
 }
