@@ -952,5 +952,10 @@ namespace wefwef
 
             Console.WriteLine(sum);
         }
+
+        public static void Day12()
+        {
+			
+		}
     }
 }
