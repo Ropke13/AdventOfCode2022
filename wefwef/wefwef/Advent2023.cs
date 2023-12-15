@@ -1208,25 +1208,23 @@ namespace wefwef
 
         internal static void Day15()
         {
-            var input = File.ReadAllLines("input15-2023.txt");
-            List<string> items = input[0].Split(',').ToList();
-            List<long> hashes = new List<long>();
-            long currentValue = 0;
+            //var input = File.ReadAllLines("input15-2023.txt");
+            //List<string> items = input[0].Split(',').ToList();
+            //List<long> hashes = new List<long>();
+            //long currentValue = 0;
+            Console.WriteLine("HASH = {0}", HASH("qp"));
 
-            foreach (var item in items)
+            int HASH(string item)
             {
                 byte[] asciiBytes = Encoding.ASCII.GetBytes(item);
-
+                int currentValue = 0;
                 foreach (byte b in asciiBytes)
                 {
                     currentValue = (currentValue + b) * 17 % 256;
                 }
 
-                hashes.Add(currentValue);
-                currentValue = 0;
+                return currentValue;
             }
-
-            Console.WriteLine(hashes.Sum());
         }
     }
 }
