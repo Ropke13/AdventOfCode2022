@@ -1208,11 +1208,62 @@ namespace wefwef
 
         internal static void Day15()
         {
-            //var input = File.ReadAllLines("input15-2023.txt");
-            //List<string> items = input[0].Split(',').ToList();
-            //List<long> hashes = new List<long>();
-            //long currentValue = 0;
-            Console.WriteLine("HASH = {0}", HASH("qp"));
+            var input = File.ReadAllLines("input15-2023.txt");
+            List<string> items = input[0].Split(',').ToList();
+            List<List<string>> boxes = new List<List<string>>();
+
+            for(int i = 0; i < 256; i++)
+            {
+                boxes.Add(new List<string>());
+            }
+
+            foreach(var item in items)
+            {
+                //Console.WriteLine("Current item: {0}", item);
+
+                if (item.Contains('-'))
+                {
+                    string[] toHash = item.Split('-');
+                    var location = HASH(toHash[0]);
+                    boxes[location].RemoveAll(box => box.Contains(toHash[0]));
+                }
+                else
+                {
+                    string[] toHash = item.Split('=');
+                    var location = HASH(toHash[0]);
+                    bool containsLabel = boxes[location].Any(it => it.Contains(toHash[0]));
+
+                    if (containsLabel)
+                    {
+                        int index = boxes[location].FindIndex(box => box.Contains(toHash[0]));
+                        boxes[location].RemoveAt(index);
+                        boxes[location].Insert(index, toHash[0] + " " + toHash[1]);
+                    }
+                    else
+                    {
+                        boxes[location].Add(toHash[0] + " " + toHash[1]);
+                    }                    
+                }
+            }
+
+            int sum = 0;
+            int ii = 1;
+            int slot = 1;
+            foreach(var item in boxes)
+            {
+                foreach (var box in item)
+                {
+                    string[] split = box.Split(' ');
+                    sum += ii * slot * int.Parse(split[1]);
+                    //Console.WriteLine("Box: {2}, Box value: {0}, Total sum: {1}", ii * slot * int.Parse(split[1]), sum, box);
+
+                    slot++;
+                }
+                ii++;
+                slot = 1;
+            }
+
+            Console.WriteLine("ANSWER: {0}", sum);
 
             int HASH(string item)
             {
