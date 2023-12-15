@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -1217,7 +1218,9 @@ namespace wefwef
                 boxes.Add(new List<string>());
             }
 
-            foreach(var item in items)
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
+            foreach (var item in items)
             {
                 //Console.WriteLine("Current item: {0}", item);
 
@@ -1262,8 +1265,17 @@ namespace wefwef
                 ii++;
                 slot = 1;
             }
-
+            stopWatch.Stop();
             Console.WriteLine("ANSWER: {0}", sum);
+
+            // Get the elapsed time as a TimeSpan value.
+            TimeSpan ts = stopWatch.Elapsed;
+
+            // Format and display the TimeSpan value.
+            string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+                ts.Hours, ts.Minutes, ts.Seconds,
+                ts.Milliseconds / 10);
+            Console.WriteLine("RunTime " + ts.TotalMilliseconds);
 
             int HASH(string item)
             {
