@@ -961,12 +961,55 @@ namespace wefwef
             List<string> linesHorizontal = new List<string>();
             List<string> linesVertical = new List<string>();
 
+            int sumHor = 0;
+            int sumVert = 0;
+            int current = 0;
+
             foreach (string line in input)
             {
                 if (line != string.Empty)
                 {
                     rows.Add(line);
-                }  
+                }
+                else
+                {
+                    bool foundMAtch = false;
+                    int first = 0;
+                    int second = 10000;
+                    for(int i = 0; i < rows.Count-1; i++)
+                    {
+                        if (rows[i] == rows[i + 1])
+                        {
+                            current = i + 1;
+                            first = i;
+                            second = i+1;
+                            foundMAtch = true;
+                        }
+                        else if (foundMAtch)
+                        {
+                            while (true)
+                            {
+                                first--;
+                                second++;
+
+                                if ((first < 0 || second > rows.Count-1) && rows[first] == rows[second])
+                                {
+                                    sumHor += current;
+                                    break;
+                                }
+                                else if ((first < 0 || second > rows[0].Length) && rows[first] != rows[second])
+                                {
+                                    foundMAtch = false;
+
+                                    break;
+                                }
+                            }
+                        }
+                        
+                    }
+
+                    
+                }
             }
 
         }
@@ -1161,6 +1204,29 @@ namespace wefwef
                 sum += loadIndex - f.Y;
             }
             Console.WriteLine(sum);
+        }
+
+        internal static void Day15()
+        {
+            var input = File.ReadAllLines("input15-2023.txt");
+            List<string> items = input[0].Split(',').ToList();
+            List<long> hashes = new List<long>();
+            long currentValue = 0;
+
+            foreach (var item in items)
+            {
+                byte[] asciiBytes = Encoding.ASCII.GetBytes(item);
+
+                foreach (byte b in asciiBytes)
+                {
+                    currentValue = (currentValue + b) * 17 % 256;
+                }
+
+                hashes.Add(currentValue);
+                currentValue = 0;
+            }
+
+            Console.WriteLine(hashes.Sum());
         }
     }
 }
