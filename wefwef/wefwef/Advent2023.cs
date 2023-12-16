@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -8,6 +9,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace wefwef
 {
@@ -666,7 +668,7 @@ namespace wefwef
 
             long sum = 0;
 
-            foreach(var line in input)
+            foreach (var line in input)
             {
                 string[] parts = line.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
 
@@ -688,23 +690,23 @@ namespace wefwef
                 {
                     List<long> nextLine = new List<long>();
                     isAllZero = true;
-                    for (int i = 0; i < steps[index].Count-1; i++)
+                    for (int i = 0; i < steps[index].Count - 1; i++)
                     {
                         nextLine.Add(steps[index][i + 1] - steps[index][i]);
-                        if(steps[index][i + 1] - steps[index][i] != 0) isAllZero = false;
+                        if (steps[index][i + 1] - steps[index][i] != 0) isAllZero = false;
                     }
 
                     steps.Add(nextLine);
                     index++;
                 }
 
-                int returnI = steps.Count-1;
+                int returnI = steps.Count - 1;
                 List<long> currentLine = steps[returnI];
                 currentLine.Insert(0, 0);
 
                 while (returnI > 0)
                 {
-                    List<long> next = steps[returnI-1];
+                    List<long> next = steps[returnI - 1];
                     next.Insert(0, next.First() - steps[returnI].First());
                     returnI--;
                 }
@@ -732,9 +734,9 @@ namespace wefwef
             Head StartingPossition = null;
             List<Head> HeadList = new List<Head>();
 
-            for (int y = 0; y < input.Length; y++) 
+            for (int y = 0; y < input.Length; y++)
             {
-                for(int x = 0; x < input[y].Length; x++)
+                for (int x = 0; x < input[y].Length; x++)
                 {
                     if (input[y][x] == 'S')
                     {
@@ -792,13 +794,13 @@ namespace wefwef
                 {
                     List<Head> inLoopTile = new List<Head>();
                     int inLoopTiles = 0;
-                    char[] check = new char[] { '|', 'J', 'L', 'S' };                  
+                    char[] check = new char[] { '|', 'J', 'L', 'S' };
 
                     for (int k = 0; k < input.Length; k++)
                     {
                         for (int l = 0; l < input[k].Length; l++)
                         {
-                            if(!HeadList.Any(f => f.y == k && f.x == l))
+                            if (!HeadList.Any(f => f.y == k && f.x == l))
                             {
                                 List<Head> valid = new List<Head>();
                                 var count = HeadList.Where(f => f.y == k && f.x <= l).ToList();
@@ -810,7 +812,7 @@ namespace wefwef
                                     }
                                 }
 
-                                if(valid.Count != 0 && valid.Count % 2 != 0)
+                                if (valid.Count != 0 && valid.Count % 2 != 0)
                                 {
                                     inLoopTiles++;
                                     Head item = new Head(l, k);
@@ -830,12 +832,12 @@ namespace wefwef
             {
                 for (int y = 0; y < inputa.Length; y++)
                 {
-                    for(int x = 0; x < inputa[y].Length; x++)
+                    for (int x = 0; x < inputa[y].Length; x++)
                     {
                         if (HeadList.Any(f => f.y == y && f.x == x))
                         {
                             Console.ForegroundColor = ConsoleColor.Green;
-                        } 
+                        }
                         if (HeadList.Last().y == y && HeadList.Last().x == x)
                         {
                             Console.ForegroundColor = ConsoleColor.Red;
@@ -844,11 +846,12 @@ namespace wefwef
                         {
                             Console.ForegroundColor = ConsoleColor.Magenta;
                         }
-                        if (inl.Any(f => f.y == y && f.x == x)){
+                        if (inl.Any(f => f.y == y && f.x == x))
+                        {
                             Console.ForegroundColor = ConsoleColor.DarkYellow;
                         }
 
-                        if(inputa[y][x] == 'L')
+                        if (inputa[y][x] == 'L')
                         {
                             Console.Write("└");
                         }
@@ -876,7 +879,7 @@ namespace wefwef
                         {
                             Console.Write(inputa[y][x]);
                         }
-                        
+
                         Console.ForegroundColor = ConsoleColor.White;
                     }
                     Console.WriteLine();
@@ -907,7 +910,7 @@ namespace wefwef
             int yCrossings = 0;
             for (int i = 0; i < input.Length; i++)
             {
-                for(int j = 0; j < input[i].Length; j++)
+                for (int j = 0; j < input[i].Length; j++)
                 {
                     if (!input[i].Contains('#'))
                     {
@@ -922,7 +925,7 @@ namespace wefwef
                     else
                     {
                         bool isEmpty = true;
-                        for(int x = 0; x < input.Length; x++)
+                        for (int x = 0; x < input.Length; x++)
                         {
                             if (input[x][j] == '#')
                             {
@@ -941,9 +944,9 @@ namespace wefwef
             }
 
             long sum = 0;
-            for (int i = 0; i < galaxies.Count -1 ; i++)
+            for (int i = 0; i < galaxies.Count - 1; i++)
             {
-                for (int j = i+1; j < galaxies.Count; j++)
+                for (int j = i + 1; j < galaxies.Count; j++)
                 {
                     Console.WriteLine("{0}   {1}", galaxies[i].Id, galaxies[j].Id);
                     long distance = Math.Abs(Math.Abs(galaxies[j].X - galaxies[i].X) + Math.Abs(galaxies[j].Y - galaxies[i].Y));
@@ -974,43 +977,127 @@ namespace wefwef
                 }
                 else
                 {
-                    bool foundMAtch = false;
                     int first = 0;
                     int second = 10000;
-                    for(int i = 0; i < rows.Count-1; i++)
+                    bool horizFound = false;
+                    //look for zorizontal mirror
+                    for (int i = 0; i < rows.Count - 1; i++)
                     {
-                        if (rows[i] == rows[i + 1])
+                        if (rows[i] == rows[i + 1] || AreStringsDifferentByOneSymbol(rows[i], rows[i + 1]))
                         {
                             current = i + 1;
                             first = i;
-                            second = i+1;
-                            foundMAtch = true;
-                        }
-                        else if (foundMAtch)
-                        {
+                            second = i + 1;
+                            bool found = true;
+                            bool foundSpot = AreStringsDifferentByOneSymbol(rows[i], rows[i + 1]);
+
                             while (true)
                             {
                                 first--;
                                 second++;
-
-                                if ((first < 0 || second > rows.Count-1) && rows[first] == rows[second])
+                                if (first < 0 || second > rows.Count - 1)
                                 {
-                                    sumHor += current;
                                     break;
                                 }
-                                else if ((first < 0 || second > rows[0].Length) && rows[first] != rows[second])
+                                if (AreStringsDifferentByOneSymbol(rows[first], rows[second])) foundSpot = true;
+                                if (rows[first] != rows[second] && !AreStringsDifferentByOneSymbol(rows[first], rows[second]))
                                 {
-                                    foundMAtch = false;
-
+                                    found = false;
                                     break;
                                 }
                             }
+                            if (found && foundSpot)
+                            {
+                                sumHor += 100 * current;
+                                horizFound = true;
+                                break;
+                            }
                         }
-                        
                     }
 
-                    
+                    //look for vertical mirror
+                    rows = ExtractVerticalLines(rows);
+
+                    for (int i = 0; i < rows.Count - 1; i++)
+                    {
+                        if (rows[i] == rows[i + 1] || AreStringsDifferentByOneSymbol(rows[i], rows[i + 1]))
+                        {
+                            current = i + 1;
+                            first = i;
+                            second = i + 1;
+                            bool found = true;
+                            bool foundSpot = AreStringsDifferentByOneSymbol(rows[i], rows[i + 1]);
+
+
+                            while (true)
+                            {
+                                first--;
+                                second++;
+                                if (first < 0 || second > rows.Count - 1)
+                                {
+                                    break;
+                                }
+                                if (AreStringsDifferentByOneSymbol(rows[first], rows[second])) foundSpot = true;
+                                if (rows[first] != rows[second] && !AreStringsDifferentByOneSymbol(rows[first], rows[second]))
+                                {
+                                    found = false;
+                                    break;
+                                }
+                            }
+                            if (found && foundSpot)
+                            {
+                                sumVert += current;
+                                horizFound = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    rows.Clear();
                 }
+            }
+
+            Console.WriteLine(sumVert + sumHor);
+
+            bool AreStringsDifferentByOneSymbol(string s1, string s2)
+            {
+                if (Math.Abs(s1.Length - s2.Length) > 1)
+                {
+                    return false;
+                }
+
+                int differences = 0;
+
+                for (int i = 0; i < Math.Min(s1.Length, s2.Length); i++)
+                {
+                    if (s1[i] != s2[i])
+                    {
+                        differences++;
+
+                        if (differences > 1)
+                        {
+                            return false;
+                        }
+                    }
+                }
+                if(differences == 0) return false;
+
+                return true;
+            }
+
+            List<string> ExtractVerticalLines(List<string> inputGrid)
+            {
+                int maxLength = inputGrid.Max(s => s.Length);
+
+                List<char[]> transposedGrid = new List<char[]>();
+                for (int i = 0; i < maxLength; i++)
+                {
+                    transposedGrid.Add(inputGrid.Select(row => i < row.Length ? row[i] : ' ').ToArray());
+                }
+
+                List<string> verticalLines = transposedGrid.Select(column => new string(column)).ToList();
+
+                return verticalLines;
             }
 
         }
@@ -1037,9 +1124,9 @@ namespace wefwef
             int sum = 0;
 
             Console.WriteLine("Collecting rocks");
-            for(int i = 0; i < input.Length; i++)
+            for (int i = 0; i < input.Length; i++)
             {
-                for(int j = 0; j < input[i].Length; j++)
+                for (int j = 0; j < input[i].Length; j++)
                 {
                     if (input[i][j] == 'O')
                     {
@@ -1057,7 +1144,7 @@ namespace wefwef
             Console.WriteLine("Sort round rocks for north");
             var rocksRoundSorted = rocksRound.OrderBy(r => r.X).ThenBy(r => r.Y).ToList();
 
-            for(int k = 1; k <= 1000; k++)
+            for (int k = 1; k <= 1000; k++)
             {
                 //north
                 for (int i = 0; i < rocksRoundSorted.Count; i++)
@@ -1213,7 +1300,7 @@ namespace wefwef
             List<string> items = input[0].Split(',').ToList();
             List<List<string>> boxes = new List<List<string>>();
 
-            for(int i = 0; i < 256; i++)
+            for (int i = 0; i < 256; i++)
             {
                 boxes.Add(new List<string>());
             }
@@ -1245,14 +1332,14 @@ namespace wefwef
                     else
                     {
                         boxes[location].Add(toHash[0] + " " + toHash[1]);
-                    }                    
+                    }
                 }
             }
 
             int sum = 0;
             int ii = 1;
             int slot = 1;
-            foreach(var item in boxes)
+            foreach (var item in boxes)
             {
                 foreach (var box in item)
                 {
@@ -1287,6 +1374,320 @@ namespace wefwef
                 }
 
                 return currentValue;
+            }
+        }
+
+
+        class Beam
+        {
+            public string Direction { get; set; }
+            public int X { get; set; }
+            public int Y { get; set; }
+
+            public Beam(string direction, int x, int y)
+            {
+                Direction = direction;
+                X = x;
+                Y = y;
+            }
+        }
+        internal static void Day16()
+        {
+            var input = File.ReadAllLines("input16-2023.txt");
+            
+            
+            int bigest = 0;
+            _ = new List<Beam>();
+            for (int i = 0; i < input[0].Length; i++)
+            {
+                Console.WriteLine("BRUTING {0} OUT OF {1}", i+1, input[0].Length);
+                List<Beam> beamListVisited = new List<Beam>();
+                List<Beam> beamListCurrent = new List<Beam>();
+                Beam start = new Beam("U", i, input.Length);
+                beamListCurrent.Add(start);
+
+                while (beamListCurrent.Count > 0)
+                {
+                    List<Beam> beamListCurrentTemp = new List<Beam>();
+                    foreach (Beam beam in beamListCurrent)
+                    {
+                        beamListCurrentTemp.Add(beam);
+                    }
+
+
+                    foreach (Beam b in beamListCurrent)
+                    {
+                        if (b.Direction == "R")
+                        {
+                            if (b.X == input[0].Length - 1)
+                            {
+                                beamListCurrentTemp.Remove(b);
+                            }
+                            else if (input[b.Y][b.X + 1] == '.')
+                            {
+                                Beam nextNode = new Beam("R", b.X + 1, b.Y);
+
+                                beamListCurrentTemp.Remove(b);
+                                beamListCurrentTemp.Add(nextNode);
+                                if (!beamListVisited.Contains(nextNode))
+                                {
+                                    beamListVisited.Add(nextNode);
+                                }
+                            }
+                            else if (input[b.Y][b.X + 1] == '/' && !beamListVisited.Contains(new Beam("U", b.X + 1, b.Y)))
+                            {
+                                Beam nextNode = new Beam("U", b.X + 1, b.Y);
+
+                                beamListCurrentTemp.Remove(b);
+                                beamListCurrentTemp.Add(nextNode);
+                                beamListVisited.Add(nextNode);
+                            }
+                            else if (input[b.Y][b.X + 1] == '\\' && !beamListVisited.Contains(new Beam("D", b.X + 1, b.Y)))
+                            {
+                                Beam nextNode = new Beam("D", b.X + 1, b.Y);
+
+                                beamListCurrentTemp.Remove(b);
+                                beamListCurrentTemp.Add(nextNode);
+                                beamListVisited.Add(nextNode);
+                            }
+                            else if (input[b.Y][b.X + 1] == '|' && !beamListVisited.Any(f => f.X == b.X + 1 && f.Y == b.Y))
+                            {
+                                Beam nextNode = new Beam("U", b.X + 1, b.Y);
+                                Beam nextNode1 = new Beam("D", b.X + 1, b.Y);
+
+                                beamListCurrentTemp.Remove(b);
+                                beamListCurrentTemp.Add(nextNode);
+                                beamListCurrentTemp.Add(nextNode1);
+                                beamListVisited.Add(nextNode);
+                                beamListVisited.Add(nextNode1);
+                            }
+                            else if (input[b.Y][b.X + 1] == '-' && !beamListVisited.Any(f => f.X == b.X + 1 && f.Y == b.Y))
+                            {
+                                Beam nextNode = new Beam("R", b.X + 1, b.Y);
+
+                                beamListCurrentTemp.Remove(b);
+                                beamListCurrentTemp.Add(nextNode);
+                                beamListVisited.Add(nextNode);
+                            }
+                            else
+                            {
+                                beamListCurrentTemp.Remove(b);
+                            }
+                        }
+                        else if (b.Direction == "L")
+                        {
+                            if (b.X == 0)
+                            {
+                                beamListCurrentTemp.Remove(b);
+                            }
+                            else if (input[b.Y][b.X - 1] == '.')
+                            {
+                                Beam nextNode = new Beam("L", b.X - 1, b.Y);
+
+                                beamListCurrentTemp.Remove(b);
+                                beamListCurrentTemp.Add(nextNode);
+                                if (!beamListVisited.Contains(nextNode))
+                                {
+                                    beamListVisited.Add(nextNode);
+                                }
+                            }
+                            else if (input[b.Y][b.X - 1] == '/' && !beamListVisited.Contains(new Beam("D", b.X - 1, b.Y)))
+                            {
+                                Beam nextNode = new Beam("D", b.X - 1, b.Y);
+
+                                beamListCurrentTemp.Remove(b);
+                                beamListCurrentTemp.Add(nextNode);
+                                beamListVisited.Add(nextNode);
+                            }
+                            else if (input[b.Y][b.X - 1] == '\\' && !beamListVisited.Contains(new Beam("U", b.X - 1, b.Y)))
+                            {
+                                Beam nextNode = new Beam("U", b.X - 1, b.Y);
+
+                                beamListCurrentTemp.Remove(b);
+                                beamListCurrentTemp.Add(nextNode);
+                                beamListVisited.Add(nextNode);
+                            }
+                            else if (input[b.Y][b.X - 1] == '|' && !beamListVisited.Any(f => f.X == b.X - 1 && f.Y == b.Y))
+                            {
+                                Beam nextNode = new Beam("U", b.X - 1, b.Y);
+                                Beam nextNode1 = new Beam("D", b.X - 1, b.Y);
+
+                                beamListCurrentTemp.Remove(b);
+                                beamListCurrentTemp.Add(nextNode);
+                                beamListCurrentTemp.Add(nextNode1);
+                                beamListVisited.Add(nextNode);
+                                beamListVisited.Add(nextNode1);
+                            }
+                            else if (input[b.Y][b.X - 1] == '-' && !beamListVisited.Any(f => f.X == b.X - 1 && f.Y == b.Y))
+                            {
+                                Beam nextNode = new Beam("L", b.X - 1, b.Y);
+
+                                beamListCurrentTemp.Remove(b);
+                                beamListCurrentTemp.Add(nextNode);
+                                beamListVisited.Add(nextNode);
+                            }
+                            else
+                            {
+                                beamListCurrentTemp.Remove(b);
+                            }
+                        }
+                        else if (b.Direction == "U")
+                        {
+                            if (b.Y == 0)
+                            {
+                                beamListCurrentTemp.Remove(b);
+                            }
+                            else if (input[b.Y - 1][b.X] == '.')
+                            {
+                                Beam nextNode = new Beam("U", b.X, b.Y - 1);
+
+                                beamListCurrentTemp.Remove(b);
+                                beamListCurrentTemp.Add(nextNode);
+                                if (!beamListVisited.Contains(nextNode))
+                                {
+                                    beamListVisited.Add(nextNode);
+                                }
+                            }
+                            else if (input[b.Y - 1][b.X] == '/' && !beamListVisited.Contains(new Beam("U", b.X, b.Y - 1)))
+                            {
+                                Beam nextNode = new Beam("R", b.X, b.Y - 1);
+
+                                beamListCurrentTemp.Remove(b);
+                                beamListCurrentTemp.Add(nextNode);
+                                beamListVisited.Add(nextNode);
+                            }
+                            else if (input[b.Y - 1][b.X] == '\\' && !beamListVisited.Contains(new Beam("L", b.X, b.Y - 1)))
+                            {
+                                Beam nextNode = new Beam("L", b.X, b.Y - 1);
+
+                                beamListCurrentTemp.Remove(b);
+                                beamListCurrentTemp.Add(nextNode);
+                                beamListVisited.Add(nextNode);
+                            }
+                            else if (input[b.Y - 1][b.X] == '|' && !beamListVisited.Any(f => f.X == b.X && f.Y == b.Y - 1))
+                            {
+                                Beam nextNode = new Beam("U", b.X, b.Y - 1);
+
+                                beamListCurrentTemp.Remove(b);
+                                beamListCurrentTemp.Add(nextNode);
+                                beamListVisited.Add(nextNode);
+                            }
+                            else if (input[b.Y - 1][b.X] == '-' && !beamListVisited.Any(f => f.X == b.X && f.Y == b.Y - 1))
+                            {
+                                Beam nextNode = new Beam("R", b.X, b.Y - 1);
+                                Beam nextNode1 = new Beam("L", b.X, b.Y - 1);
+
+                                beamListCurrentTemp.Remove(b);
+                                beamListCurrentTemp.Add(nextNode);
+                                beamListCurrentTemp.Add(nextNode1);
+                                beamListVisited.Add(nextNode);
+                                beamListVisited.Add(nextNode1);
+                            }
+                            else
+                            {
+                                beamListCurrentTemp.Remove(b);
+                            }
+                        }
+                        else if (b.Direction == "D")
+                        {
+                            if (b.Y == input.Length - 1)
+                            {
+                                beamListCurrentTemp.Remove(b);
+                            }
+                            else if (input[b.Y + 1][b.X] == '.')
+                            {
+                                Beam nextNode = new Beam("D", b.X, b.Y + 1);
+
+                                beamListCurrentTemp.Remove(b);
+                                beamListCurrentTemp.Add(nextNode);
+                                if (!beamListVisited.Contains(nextNode))
+                                {
+                                    beamListVisited.Add(nextNode);
+                                }
+                            }
+                            else if (input[b.Y + 1][b.X] == '/' && !beamListVisited.Contains(new Beam("L", b.X, b.Y + 1)))
+                            {
+                                Beam nextNode = new Beam("L", b.X, b.Y + 1);
+
+                                beamListCurrentTemp.Remove(b);
+                                beamListCurrentTemp.Add(nextNode);
+                                beamListVisited.Add(nextNode);
+                            }
+                            else if (input[b.Y + 1][b.X] == '\\' && !beamListVisited.Contains(new Beam("R", b.X, b.Y + 1)))
+                            {
+                                Beam nextNode = new Beam("R", b.X, b.Y + 1);
+
+                                beamListCurrentTemp.Remove(b);
+                                beamListCurrentTemp.Add(nextNode);
+                                beamListVisited.Add(nextNode);
+                            }
+                            else if (input[b.Y + 1][b.X] == '|' && !beamListVisited.Any(f => f.X == b.X && f.Y == b.Y + 1))
+                            {
+                                Beam nextNode = new Beam("D", b.X, b.Y + 1);
+
+                                beamListCurrentTemp.Remove(b);
+                                beamListCurrentTemp.Add(nextNode);
+                                beamListVisited.Add(nextNode);
+                            }
+                            else if (input[b.Y + 1][b.X] == '-' && !beamListVisited.Any(f => f.X == b.X && f.Y == b.Y + 1))
+                            {
+                                Beam nextNode = new Beam("R", b.X, b.Y + 1);
+                                Beam nextNode1 = new Beam("L", b.X, b.Y + 1);
+
+                                beamListCurrentTemp.Remove(b);
+                                beamListCurrentTemp.Add(nextNode);
+                                beamListCurrentTemp.Add(nextNode1);
+                                beamListVisited.Add(nextNode);
+                                beamListVisited.Add(nextNode1);
+                            }
+                            else
+                            {
+                                beamListCurrentTemp.Remove(b);
+                            }
+                        }
+                    }
+                    
+                    //if (groupedObjects > 5130)
+                    //{
+                    //    Console.Clear();
+                    //    Draw(input, beamListVisited);
+                    //}
+                    //Console.Clear();
+                    //Draw(input, beamListVisited);
+                    beamListCurrent = beamListCurrentTemp;
+                }
+
+                var groupedObjects = beamListVisited.GroupBy(obj => new { obj.X, obj.Y }).Count();
+                if(groupedObjects > bigest)
+                {
+                    bigest = groupedObjects;
+                }
+            }
+
+            Console.WriteLine(bigest);
+            
+
+            void Draw(string[] inputa, List<Beam> inl)
+            {
+                int sum = 0;
+                for (int y = 0; y < inputa.Length; y++)
+                {
+                    for (int x = 0; x < inputa[y].Length; x++)
+                    {
+                        if (inl.Any(f => f.X == x && f.Y == y))
+                        {
+                            sum++;
+                            Console.ForegroundColor = ConsoleColor.Red;
+                        }
+
+                        Console.Write(inputa[y][x]);
+
+                        Console.ForegroundColor = ConsoleColor.White;
+                    }
+                   Console.WriteLine();
+                }
+
+                Console.WriteLine(sum);
             }
         }
     }
