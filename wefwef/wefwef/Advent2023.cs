@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -1224,6 +1225,191 @@ namespace wefwef
                 }
 
                 return currentValue;
+            }
+        }
+//        if(inputa[y][x] == 'L')
+//                        {
+//                            Console.Write("└");
+//                        }
+//                        else if (inputa[y][x] == 'J')
+//                        {
+//                            Console.Write("┘");
+//                        }
+//                        else if (inputa[y][x] == '7')
+//{
+//    Console.Write("┐");
+//}
+//else if (inputa[y][x] == 'F')
+//{
+//    Console.Write("┌");
+//}
+//else if (input[y][x] == '-')
+//{
+//    Console.Write("─");
+//}
+//else if (input[y][x] == '|')
+//{
+//    Console.Write("│");
+//}
+class Dig
+        {
+            public long X { get; set; }
+            public long Y { get; set; }
+
+            public Dig(long X, long Y) 
+            {
+                this.X = X;
+                this.Y = Y;
+
+            }
+        }
+
+        internal static void Day18()
+        {
+            var input = File.ReadAllLines("Day18.txt");
+            List<Dig> items = new List<Dig>();
+            long perimeter = 0;
+            long sX = 0;
+            long sY = 0;
+
+            items.Add(new Dig(0, 0));
+            for (int j = 0; j < input.Length; j++)
+            {
+                string[] parts = input[j].Split(' ');
+                string directio = parts[2][7].ToString();
+                string hex = parts[2].Substring(2, parts[2].Length - 4);
+                long decimalNumber = Convert.ToInt32(hex, 16);
+
+                if (directio == "1")
+                {
+                    perimeter += decimalNumber;
+                    sY += decimalNumber;
+                    items.Add(new Dig(sX, sY));
+                }
+                else if (directio == "3")
+                {
+                    perimeter += decimalNumber;
+                    sY -= decimalNumber;
+                    items.Add(new Dig(sX, sY));
+                }
+                else if (directio == "0")
+                {
+                    perimeter += decimalNumber;
+                    sX += decimalNumber;
+                    items.Add(new Dig(sX, sY));
+                }
+                else
+                {
+                    perimeter += decimalNumber;
+                    sX -= decimalNumber;
+                    items.Add(new Dig(sX, sY));
+                }
+            }
+            items.Add(new Dig(0, 0));
+
+            long Count = 0;
+
+            for(int i = 0; i < items.Count-1; i++)
+            {
+                Count += (items[i].X * items[i + 1].Y - items[i + 1].X * items[i].Y);
+            }
+
+            Console.WriteLine(Count/2 + perimeter/2 +1);
+        }
+
+        class Instruction
+        {
+            public string Name { get; set; }
+            public List<string> Arguments { get; set; }
+            public string NextInstruction { get; set; }
+
+            public Instruction(string name, List<string> args, string next)
+            {
+                Name = name;
+                Arguments = args;
+                NextInstruction = next;
+            }
+        }
+        internal static void Day19()
+        {
+            var input = File.ReadAllLines("Day19.txt");
+            List<Instruction> instructions = new List<Instruction>();
+            int cFrom = 0;
+            for(int i = 0; i < input.Length; i++)
+            {
+                if (input[i] == "")
+                {
+                    cFrom = i + 1;
+                    break;
+                }
+                int indexOfOpenBrace = input[i].IndexOf('{');
+
+                string name = indexOfOpenBrace != -1
+                    ? input[i].Substring(0, indexOfOpenBrace)
+                    : input[i];
+
+                var c = input[i].Replace(name, "").Replace("{", "").Replace("}", "").Split(',').ToList();
+                var last = c.Last();
+                c.RemoveAt(c.Count - 1);
+
+                Instruction item = new Instruction(name, c, last);
+                instructions.Add(item);
+
+            }
+            for(int i = cFrom; i < input.Length; i++)
+            {
+                var v = input[i].Replace("{", "").Replace("}", "").Split(',').ToList();
+
+                var first = instructions.FirstOrDefault(f => f.Name == "in");
+                while (true)
+                {
+                    foreach (var item in first.Arguments)
+                    {
+                        var parts = item.Split(':');
+                        if (parts[0].Contains('<'))
+                        {
+                            var more = parts[0].Split('<');
+
+                            if (more[0] == "x" && int.Parse(v[0].Split('=')[1]) < int.Parse(more[1]))
+                            {
+
+                            }
+                            else if (more[0] == "m")
+                            {
+
+                            }
+                            else if (more[0] == "a")
+                            {
+
+                            }
+                            else if (more[0] == "s" && int.Parse(v[3].Split('=')[1]) < int.Parse(more[1]))
+                            {
+
+                            }
+                        }
+                        else
+                        {
+                            var more = parts[0].Split('>');
+
+                            if (more[0] == "x")
+                            {
+
+                            }
+                            else if (more[0] == "m")
+                            {
+
+                            }
+                            else if (more[0] == "a")
+                            {
+
+                            }
+                            else
+                            {
+
+                            }
+                        }
+                    }
+                }
             }
         }
     }
