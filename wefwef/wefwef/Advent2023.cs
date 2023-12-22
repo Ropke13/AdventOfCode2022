@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -963,7 +964,6 @@ namespace wefwef
             List<string> linesVertical = new List<string>();
 
             int sumHor = 0;
-            int sumVert = 0;
             int current = 0;
 
             foreach (string line in input)
@@ -1356,13 +1356,17 @@ class Dig
                 instructions.Add(item);
 
             }
-            for(int i = cFrom; i < input.Length; i++)
+            long sum = 0;
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
+            for (int i = cFrom; i < input.Length; i++)
             {
                 var v = input[i].Replace("{", "").Replace("}", "").Split(',').ToList();
-
                 var first = instructions.FirstOrDefault(f => f.Name == "in");
+                
                 while (true)
                 {
+                    string next = "";
                     foreach (var item in first.Arguments)
                     {
                         var parts = item.Split(':');
@@ -1372,45 +1376,78 @@ class Dig
 
                             if (more[0] == "x" && int.Parse(v[0].Split('=')[1]) < int.Parse(more[1]))
                             {
-
+                                next = parts[1];
+                                break;
                             }
-                            else if (more[0] == "m")
+                            else if (more[0] == "m" && int.Parse(v[1].Split('=')[1]) < int.Parse(more[1]))
                             {
-
+                                next = parts[1];
+                                break;
                             }
-                            else if (more[0] == "a")
+                            else if (more[0] == "a" && int.Parse(v[2].Split('=')[1]) < int.Parse(more[1]))
                             {
-
+                                next = parts[1];
+                                break;
                             }
                             else if (more[0] == "s" && int.Parse(v[3].Split('=')[1]) < int.Parse(more[1]))
                             {
-
+                                next = parts[1];
+                                break;
                             }
                         }
                         else
                         {
                             var more = parts[0].Split('>');
 
-                            if (more[0] == "x")
+                            if (more[0] == "x" && int.Parse(v[0].Split('=')[1]) > int.Parse(more[1]))
                             {
-
+                                next = parts[1];
+                                break;
                             }
-                            else if (more[0] == "m")
+                            else if (more[0] == "m" && int.Parse(v[1].Split('=')[1]) > int.Parse(more[1]))
                             {
-
+                                next = parts[1];
+                                break;
                             }
-                            else if (more[0] == "a")
+                            else if (more[0] == "a" && int.Parse(v[2].Split('=')[1]) > int.Parse(more[1]))
                             {
-
+                                next = parts[1];
+                                break;
                             }
-                            else
+                            else if (more[0] == "s" && int.Parse(v[3].Split('=')[1]) > int.Parse(more[1]))
                             {
-
+                                next = parts[1];
+                                break;
                             }
                         }
                     }
+
+                    if((next == "" && first.NextInstruction == "A") || next == "A")
+                    {
+                        Console.WriteLine("A");
+                        foreach(var item in v)
+                        {
+                            sum += long.Parse(item.Split('=')[1]);
+                        }
+                        break;
+                    }
+                    else if((next == "" && first.NextInstruction == "R") || next == "R") 
+                    {
+                        Console.WriteLine("R");
+                        break;
+                    }
+                    else
+                    {
+                        if(next != "") first = instructions.FirstOrDefault(f => f.Name == next);
+                        else first = instructions.FirstOrDefault(f => f.Name == first.NextInstruction);
+                    }
                 }
             }
+
+            stopWatch.Stop();
+            TimeSpan ts = stopWatch.Elapsed;
+            Console.WriteLine(ts);
+            Console.WriteLine(sum);
         }
     }
 }

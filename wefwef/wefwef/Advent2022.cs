@@ -251,7 +251,6 @@ namespace wefwef
             var lines = File.ReadAllLines("input10.txt");
 
             List<string> drawing = new List<string>();
-            List<int> ints;
 
             int currentCycle = 1;
             int amount = 0;
@@ -498,10 +497,12 @@ namespace wefwef
                 }
             }
 
+#pragma warning disable CS8321 // Local function is declared but never used
             void Part1()
             {
                 Console.WriteLine(distanceCosts[(start.x, start.y)]);
             }
+#pragma warning restore CS8321 // Local function is declared but never used
 
             void Part2()
             {
